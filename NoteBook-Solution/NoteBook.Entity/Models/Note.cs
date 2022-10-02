@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NoteBook.Entity.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,6 +24,7 @@ namespace NoteBook.Entity.Models
         public string Color { get; set; } = null!;
         public bool Complete { get; set; }
         public bool Deleted { get; set; }
+        public Priority DoPriority { get; set; }
         public int CategoryId { get; set; }
         public int UserId { get; set; }
 

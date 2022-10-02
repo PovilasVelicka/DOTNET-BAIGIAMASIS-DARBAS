@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NobeBook</title>
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+
+<body>
+
+    <header>HEADER</header>
+    <main>
+        <section class="main-menu">
+            <div class="main-menu-item">
+                Notes
+            </div>
+
+        </section>
+        <section class="notebook">
+            <article class="view-create-note">
+                <div class="note-create">
+                    <input type="text" name="noteTitle" id="title0" placeholder="Pavadinimas">
+                    <textarea name="createNote" id="createNote" placeholder="Sukurkite užrašą..."></textarea>             
+                </div>
+            </article>
+
+            <article class="view-pinned-note">
+                <div class="note-display">
+                    <div class=" note-item ">
+                        <input type="text" name="noteTitle" id="title1" placeholder="Pavadinimas">
+                        <textarea oninput="auto_grow(this)" name="noteText" id="text1"
+                            placeholder="Tekstas"> adfdf adf ad</textarea>
+                    </div>
+                </div>
+            </article>
+
+            <article class="view-selected-note" id="defaultNotesHolder">
+                <div class="note-display ">
+                    <div class=" note-item ">
+                        <input type="text" name="noteTitle" id="title1" placeholder="Pavadinimas">
+                        <textarea oninput="auto_grow(this)" name="noteText" id="text1"
+                            placeholder="Tekstas"> adfdf adf  gsfg sfg sfgs gfsfg sfg sfg sfg sfg sfg sfgsfg sdfg sdfg sdfg sdfgad</textarea>
+                    </div>
+                </div>
+                <div class="note-display">
+                    <div class=" note-item ">
+                        <input type="text" name="noteTitle" id="title1" placeholder="Pavadinimas">
+                        <textarea oninput="auto_grow(this)" name="noteText" id="text1"
+                            placeholder="Tekstas"> adfdf adf ad</textarea>
+                    </div>
+                </div>
+                <div class="note-display">
+
+                    <div class=" note-item ">
+                        <input type="text" name="noteTitle" id="title1" placeholder="Pavadinimas">
+                        <textarea oninput="auto_grow(this)" name="noteText" id="text1"
+                            placeholder="Tekstas"> adfdf adf ad</textarea>
+                    </div>
+
+                </div>
+            </article>
+        </section>
+    </main>
+    <script src="./js/animation.js"></script>
+</body>
+
+</html>

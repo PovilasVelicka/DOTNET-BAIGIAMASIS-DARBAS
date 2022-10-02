@@ -99,6 +99,7 @@ namespace JWTAuthentication.NET6._0.Controllers
 
             if (!await _roleManager.RoleExistsAsync(UserRoles.Admin))
                 await _roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
+
             if (!await _roleManager.RoleExistsAsync(UserRoles.User))
                 await _roleManager.CreateAsync(new IdentityRole(UserRoles.User));
 
@@ -106,6 +107,7 @@ namespace JWTAuthentication.NET6._0.Controllers
             {
                 await _userManager.AddToRoleAsync(user, UserRoles.Admin);
             }
+
             if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
             {
                 await _userManager.AddToRoleAsync(user, UserRoles.User);

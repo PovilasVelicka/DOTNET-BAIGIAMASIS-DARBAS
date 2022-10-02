@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace NoteBook.Entity.Models
 {
-    public partial class AppDbContext : IdentityDbContext<IdentityUser>
+    public partial class AppDbContext : IdentityDbContext
     {
         public AppDbContext ( ) { }
 

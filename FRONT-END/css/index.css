@@ -1,0 +1,140 @@
+/* https://codepen.io/thomas-eilermann/pen/grjEjE */
+
+html {
+    height: 100%
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    height: 100%
+}
+
+* {
+    box-sizing: border-box;
+    border: 1px solid black;
+    margin: 0
+    /* padding: 10px; */
+
+}
+
+
+header {
+    height: 70px;
+    padding: 20px;
+    display: flex;
+    flex-flow: row nowrap;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+}
+
+main {
+    display: flex;
+    flex-flow: row nowrap;
+    overflow: auto;
+}
+
+section {
+    overflow: auto;
+    height: calc(100vh - 160px);
+}
+
+.main-menu {
+    width: 250px;
+    padding: 10px;
+}
+
+.main-menu-item {
+    flex: 1;
+    border-radius: 0 30px 30px 0;
+    padding: 10px;
+}
+
+
+.notebook {
+    flex: 1;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.view-create-note {
+    display: flex;
+    justify-content: center;
+}
+
+.view-selected-note,
+.view-pinned-note {
+    display: flex;
+    flex-flow: row wrap;
+
+}
+
+.note-display {
+
+    min-width: 250px;
+    min-height: 100px;
+    padding: 10px;
+    margin: 5px;
+
+}
+
+.note-edit {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    background-color: #20212477;
+
+}
+
+.note-item {
+    border-radius: 5px;
+    display: flex;
+    flex-flow: column nowrap;
+    width: auto;
+    height: auto;
+    margin: auto;
+  
+}
+
+.note-item * {
+    padding: 10px;
+    margin: 5px 0;
+}
+
+.note-edit .note-item {
+    margin: 50px auto;
+    max-width: 500px;
+    overflow: auto;
+    background-color: #FFFFFF;
+    padding: 10px;
+}
+
+.note-create {
+    width: 500px;
+}
+
+textarea {
+
+    resize: none;
+    overflow: auto;
+    word-wrap: break-word;
+    width: 100%;
+    max-height: 500px;
+}
+
+.note-edit textarea {
+    min-height: 200px;
+    max-height: 500px;
+}
+
+.note-display textarea,
+.note-display input {
+
+    background-color: #ffffff00;
+    pointer-events: none;
+}

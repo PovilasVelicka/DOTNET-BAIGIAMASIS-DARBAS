@@ -6,6 +6,7 @@ namespace NoteBook.Controllers.Categories
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
+
     public class CategoriesController : ControllerBase
     {
         [HttpGet("{id}")]

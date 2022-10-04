@@ -31,6 +31,7 @@ namespace NoteBook.Entity.Models
         [ForeignKey("UserId,CategoryId")]
         [InverseProperty("Notes")]
         public virtual Category Category { get; set; } = null!;
+
         [ForeignKey("UserId")]
         [InverseProperty("Notes")]
         public virtual AboutUser AboutUser { get; set; } = null!;

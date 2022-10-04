@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NoteBook.Common.Interfaces\NoteBook.Common.Interfaces.csproj" />
     <ProjectReference Include="..\NoteBook.Entity\NoteBook.Entity.csproj" />
   </ItemGroup>
 

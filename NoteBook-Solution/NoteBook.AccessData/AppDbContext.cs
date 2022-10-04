@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace NoteBook.Entity.Models
 {
-    public partial class AppDbContext : IdentityDbContext
+    public partial class AppDbContext : DbContext
     {
         public AppDbContext ( ) { }
 
@@ -13,6 +13,7 @@ namespace NoteBook.Entity.Models
         public virtual DbSet<AboutUser> AboutUsers { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<Note> Notes { get; set; } = null!;
+        public virtual DbSet<Account> Accounts { get; set; } = null!;
 
         protected override void OnModelCreating (ModelBuilder modelBuilder)
         {
@@ -32,11 +33,7 @@ namespace NoteBook.Entity.Models
 
                 entity.Property(e => e.NoteText).HasDefaultValueSql("(N'')");
 
-                entity.HasOne(d => d.AboutUser)
-                    .WithMany(p => p.Notes)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_Notes_Users");
-
+              
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Notes)
                     .HasForeignKey(d => new { d.UserId, d.CategoryId })

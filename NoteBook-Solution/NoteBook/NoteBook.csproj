@@ -17,6 +17,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NoteBook.AccessData\NoteBook.AccessData.csproj" />
+    <ProjectReference Include="..\NoteBook.BusinessLogic\NoteBook.BusinessLogic.csproj" />
+    <ProjectReference Include="..\NoteBook.Common.Interfaces\NoteBook.Common.Interfaces.csproj" />
     <ProjectReference Include="..\NoteBook.Entity\NoteBook.Entity.csproj" />
   </ItemGroup>
 

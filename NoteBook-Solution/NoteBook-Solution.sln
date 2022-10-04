@@ -3,16 +3,22 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteBook", "NoteBook\NoteBook.csproj", "{49440D58-0273-4D67-ACDD-D0719AC085AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteBook", "NoteBook\NoteBook.csproj", "{49440D58-0273-4D67-ACDD-D0719AC085AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteBook.Entity", "NoteBook.Entity\NoteBook.Entity.csproj", "{BB438DDE-C50B-417A-8E82-54078F11A773}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteBook.Entity", "NoteBook.Entity\NoteBook.Entity.csproj", "{BB438DDE-C50B-417A-8E82-54078F11A773}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteBook.AccessData", "NoteBook.AccessData\NoteBook.AccessData.csproj", "{77B74139-C491-4240-96B7-31432E72ECC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteBook.AccessData", "NoteBook.AccessData\NoteBook.AccessData.csproj", "{77B74139-C491-4240-96B7-31432E72ECC5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{09CC9A09-B299-478C-82FC-8093692A888E}"
 	ProjectSection(SolutionItems) = preProject
 		DbFirstString.txt = DbFirstString.txt
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteBook.Common.Interfaces", "NoteBook.Common.Interfaces\NoteBook.Common.Interfaces.csproj", "{76C3BD6D-74C1-4413-8B9E-F1EAEF6E14C0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteBook.BusinessLogic", "NoteBook.BusinessLogic\NoteBook.BusinessLogic.csproj", "{3C35EE0F-D1FD-4253-9A41-F8F1FDBCA9D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj", "{CCDE61D0-9211-4133-A686-80C349B07501}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +38,18 @@ Global
 		{77B74139-C491-4240-96B7-31432E72ECC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77B74139-C491-4240-96B7-31432E72ECC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77B74139-C491-4240-96B7-31432E72ECC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76C3BD6D-74C1-4413-8B9E-F1EAEF6E14C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76C3BD6D-74C1-4413-8B9E-F1EAEF6E14C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76C3BD6D-74C1-4413-8B9E-F1EAEF6E14C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76C3BD6D-74C1-4413-8B9E-F1EAEF6E14C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C35EE0F-D1FD-4253-9A41-F8F1FDBCA9D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C35EE0F-D1FD-4253-9A41-F8F1FDBCA9D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C35EE0F-D1FD-4253-9A41-F8F1FDBCA9D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C35EE0F-D1FD-4253-9A41-F8F1FDBCA9D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCDE61D0-9211-4133-A686-80C349B07501}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCDE61D0-9211-4133-A686-80C349B07501}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCDE61D0-9211-4133-A686-80C349B07501}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCDE61D0-9211-4133-A686-80C349B07501}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

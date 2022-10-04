@@ -1,5 +1,4 @@
 ﻿using NoteBook.Common.Interfaces.Services;
-using NoteBook.Entity.ModelProperties;
 using NoteBook.Entity.Models;
 using Utils.Extensions;
 

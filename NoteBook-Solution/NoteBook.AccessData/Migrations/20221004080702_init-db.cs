@@ -5,12 +5,18 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NoteBook.AccessData.Migrations
 {
-    public partial class init : Migration
+    public partial class initdb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
                 name: "notebook");
+
+            migrationBuilder.EnsureSchema(
+                name: "sequrity");
+
+            migrationBuilder.EnsureSchema(
+                name: "general");
 
             migrationBuilder.CreateTable(
                 name: "Categories",
@@ -19,7 +25,7 @@ namespace NoteBook.AccessData.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CategoryName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Deleted = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -29,20 +35,24 @@ namespace NoteBook.AccessData.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Email",
+                name: "Emails",
+                schema: "general",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Value = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false)
+                    LocalPart = table.Column<string>(type: "varchar(120)", unicode: false, maxLength: 120, nullable: false),
+                    Domain = table.Column<string>(type: "varchar(120)", unicode: false, maxLength: 120, nullable: false),
+                    Value = table.Column<string>(type: "varchar(256)", unicode: false, maxLength: 256, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Email", x => x.Id);
+                    table.PrimaryKey("PK_Emails", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "FirstName",
+                name: "FirstNames",
+                schema: "general",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -51,11 +61,12 @@ namespace NoteBook.AccessData.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FirstName", x => x.Id);
+                    table.PrimaryKey("PK_FirstNames", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "LastName",
+                name: "LastNames",
+                schema: "general",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -64,11 +75,12 @@ namespace NoteBook.AccessData.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LastName", x => x.Id);
+                    table.PrimaryKey("PK_LastNames", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Accounts",
+                schema: "sequrity",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -76,15 +88,18 @@ namespace NoteBook.AccessData.Migrations
                     EmailId = table.Column<int>(type: "int", nullable: false),
                     EmailVerified = table.Column<bool>(type: "bit", nullable: false),
                     PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
+                    PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: false),
+                    Disabled = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Accounts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Accounts_Email_EmailId",
+                        name: "FK_Accounts_Emails_EmailId",
                         column: x => x.EmailId,
-                        principalTable: "Email",
+                        principalSchema: "general",
+                        principalTable: "Emails",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -94,25 +109,34 @@ namespace NoteBook.AccessData.Migrations
                 schema: "notebook",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FirstNameId = table.Column<int>(type: "int", nullable: false),
                     LastNameId = table.Column<int>(type: "int", nullable: false),
-                    Gender = table.Column<int>(type: "int", nullable: false)
+                    Gender = table.Column<int>(type: "int", nullable: false),
+                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AboutUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AboutUsers_FirstName_FirstNameId",
-                        column: x => x.FirstNameId,
-                        principalTable: "FirstName",
+                        name: "FK_AboutUsers_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalSchema: "sequrity",
+                        principalTable: "Accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AboutUsers_LastName_LastNameId",
+                        name: "FK_AboutUsers_FirstNames_FirstNameId",
+                        column: x => x.FirstNameId,
+                        principalSchema: "general",
+                        principalTable: "FirstNames",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AboutUsers_LastNames_LastNameId",
                         column: x => x.LastNameId,
-                        principalTable: "LastName",
+                        principalSchema: "general",
+                        principalTable: "LastNames",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -134,7 +158,7 @@ namespace NoteBook.AccessData.Migrations
                     Deleted = table.Column<bool>(type: "bit", nullable: false),
                     DoPriority = table.Column<int>(type: "int", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -155,6 +179,12 @@ namespace NoteBook.AccessData.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AboutUsers_AccountId",
+                schema: "notebook",
+                table: "AboutUsers",
+                column: "AccountId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AboutUsers_FirstNameId",
                 schema: "notebook",
                 table: "AboutUsers",
@@ -168,8 +198,37 @@ namespace NoteBook.AccessData.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Accounts_EmailId",
+                schema: "sequrity",
                 table: "Accounts",
                 column: "EmailId");
+
+            migrationBuilder.CreateIndex(
+                name: "UI_LoginName",
+                schema: "sequrity",
+                table: "Accounts",
+                column: "LoginName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "UI_Emails",
+                schema: "general",
+                table: "Emails",
+                column: "Value",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "UI_FirstName",
+                schema: "general",
+                table: "FirstNames",
+                column: "Value",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "UI_LastName",
+                schema: "general",
+                table: "LastNames",
+                column: "Value",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Notes",
@@ -187,14 +246,8 @@ namespace NoteBook.AccessData.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Accounts");
-
-            migrationBuilder.DropTable(
                 name: "Notes",
                 schema: "notebook");
-
-            migrationBuilder.DropTable(
-                name: "Email");
 
             migrationBuilder.DropTable(
                 name: "AboutUsers",
@@ -205,10 +258,20 @@ namespace NoteBook.AccessData.Migrations
                 schema: "notebook");
 
             migrationBuilder.DropTable(
-                name: "FirstName");
+                name: "Accounts",
+                schema: "sequrity");
 
             migrationBuilder.DropTable(
-                name: "LastName");
+                name: "FirstNames",
+                schema: "general");
+
+            migrationBuilder.DropTable(
+                name: "LastNames",
+                schema: "general");
+
+            migrationBuilder.DropTable(
+                name: "Emails",
+                schema: "general");
         }
     }
 }

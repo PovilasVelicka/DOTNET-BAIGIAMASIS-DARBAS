@@ -13,11 +13,11 @@ namespace NoteBook.Entity.Models
 
         [Key]
         public int Id { get; set; }
+        [Key]
+        public Guid UserId { get; set; }
         [StringLength(50)]
         public string CategoryName { get; set; } = null!;
         public bool Deleted { get; set; }
-        [Key]
-        public int UserId { get; set; }
 
         [InverseProperty("Category")]
         public virtual ICollection<Note> Notes { get; set; }

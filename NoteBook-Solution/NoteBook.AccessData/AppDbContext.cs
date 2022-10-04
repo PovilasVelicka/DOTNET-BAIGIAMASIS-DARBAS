@@ -11,13 +11,20 @@ namespace NoteBook.Entity.Models
         public AppDbContext (DbContextOptions<AppDbContext> options) : base(options) { }
 
         public virtual DbSet<AboutUser> AboutUsers { get; set; } = null!;
-        public virtual DbSet<Category> Categories { get; set; } = null!;
-        public virtual DbSet<Note> Notes { get; set; } = null!;
         public virtual DbSet<Account> Accounts { get; set; } = null!;
+        public virtual DbSet<Category> Categories { get; set; } = null!;
+        public virtual DbSet<Email> Emails { get; set; } = null!;
+        public virtual DbSet<FirstName> FirstNames { get; set; } = null!;
+        public virtual DbSet<LastName> LastNames { get; set; } = null!;
+        public virtual DbSet<Note> Notes { get; set; } = null!;
 
         protected override void OnModelCreating (ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Account>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever( );
+            });
+
             modelBuilder.Entity<Category>(entity =>
             {
                 entity.HasKey(e => new { e.UserId, e.Id });
@@ -33,7 +40,6 @@ namespace NoteBook.Entity.Models
 
                 entity.Property(e => e.NoteText).HasDefaultValueSql("(N'')");
 
-              
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Notes)
                     .HasForeignKey(d => new { d.UserId, d.CategoryId })

@@ -12,5 +12,6 @@ namespace NoteBook.Common.Interfaces.Services
         void Add (Account account);
         Task<Account?> GetAsync (string userLogin);
         Task SaveChangesAsync ( );
+        Task<bool> Exists (string userLogin, string userEmail);
     }
 }

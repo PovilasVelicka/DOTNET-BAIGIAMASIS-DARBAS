@@ -14,12 +14,13 @@ namespace NoteBook.BusinessLogic.Services
         {
             _configuration = configuration;
         }
-        public string GetJwtToken (string username)
+        public string GetJwtToken (string username,string role)
         {
             // Galima prideti daugiau pav. Id...
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, username)
+                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Role, role),
             };
 
             var secret = _configuration.GetSection("Jwt:Key").Value;

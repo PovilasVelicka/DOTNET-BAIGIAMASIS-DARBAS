@@ -1,5 +1,10 @@
-﻿using NoteBook.Common.Interfaces.Services;
+﻿
+using NoteBook.BusinessLogic.DTOs;
+using NoteBook.Common.Interfaces.DTOs;
+using NoteBook.Common.Interfaces.Services;
+using NoteBook.Entity.Enums;
 using NoteBook.Entity.Models;
+using System.Net;
 using Utils.Extensions;
 
 namespace NoteBook.BusinessLogic.Services
@@ -13,21 +18,29 @@ namespace NoteBook.BusinessLogic.Services
             _accountsRepository = accountsRepository;
         }
 
-        public async Task<bool> LoginAsync (string username, string password)
+        public async Task<IResponseDto<Account>> LoginAsync (string username, string password)
         {
             var account = await _accountsRepository.GetAsync(username);
-            if (account == null) return false;
-            return password.VerifyPassword(account.PasswordHash, account.PasswordSalt);
+            if (account == null) return new AuthResponseDto(null, "User name not exists", (int)HttpStatusCode.NotFound);
+            if (!password.VerifyPassword(account.PasswordHash, account.PasswordSalt))
+            {
+                return new AuthResponseDto(null, "Incorrect password", (int)HttpStatusCode.Unauthorized);
+            }
+            return new AuthResponseDto(account, (int)HttpStatusCode.OK);
         }
 
-        public async Task<Account?> SignupNewAccountAsync (string loginName, string password, string email)
+        public async Task<IResponseDto<Account>> SignupNewAccountAsync (string loginName, string password, string email)
         {
-            var account = await _accountsRepository.GetAsync(loginName);
-            if (account != null) return default;
-            account = CreateAccount(loginName, password, email);
+            if (await _accountsRepository.Exists(loginName, email))
+            {
+                return new AuthResponseDto(null, "User name or email already exists", (int)HttpStatusCode.BadRequest);
+            }
+
+            var account = CreateAccount(loginName, password, email);
             _accountsRepository.Add(account);
             await _accountsRepository.SaveChangesAsync( );
-            return account;
+
+            return new AuthResponseDto(account, (int)HttpStatusCode.OK);
 
         }
 
@@ -41,7 +54,10 @@ namespace NoteBook.BusinessLogic.Services
                 LoginName = loginName,
                 Email = new Email(email),
                 PasswordHash = passwordHash,
-                PasswordSalt = passwordSalt
+                PasswordSalt = passwordSalt,
+                Role = Role.Guest,
+                Disabled = false,
+                EmailVerified = false,
             };
         }
     }

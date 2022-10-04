@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NoteBook.Common.Interfaces.Services;
 using NoteBook.Controllers.Authentification.DTOs;
+using NoteBook.Entity.Models;
 using System.Net;
 
 namespace NoteBook.Controllers.Authentification
 {
-    [Route("api/[controller]")]
+    [Route("notebook")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -22,10 +22,11 @@ namespace NoteBook.Controllers.Authentification
         [HttpPost("signup")]
         public async Task<ActionResult> SignUp ([FromBody] SignupDto signUpModel)
         {
-            await _authService.SignupNewAccountAsync(
-                signUpModel.UserName, 
+          var account=  await _authService.SignupNewAccountAsync(
+                signUpModel.UserName,
                 signUpModel.Password,
                 signUpModel.Email);
+            if (!account.IsSuccess) return StatusCode((int)HttpStatusCode.BadRequest,account.Message);
 
             return StatusCode((int)HttpStatusCode.Created);
         }
@@ -33,9 +34,9 @@ namespace NoteBook.Controllers.Authentification
         [HttpPost("login")]
         public async Task<ActionResult> Login ([FromBody] LoginDto loginModel)
         {
-            var loginSucess = await _authService.LoginAsync(loginModel.UserName, loginModel.Password);
-            if (!loginSucess) return BadRequest( );
-            return Ok(_jwtService.GetJwtToken(loginModel.UserName));
+            var response = await _authService.LoginAsync(loginModel.UserName, loginModel.Password);
+            if (!response.IsSuccess) return StatusCode(response.StatuCode, response.Message);
+            return StatusCode(response.StatuCode, _jwtService.GetJwtToken(loginModel.UserName,response.Object!.Role.ToString()));
         }
     }
 }

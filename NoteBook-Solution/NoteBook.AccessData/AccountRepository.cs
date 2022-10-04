@@ -15,15 +15,27 @@ namespace NoteBook.AccessData
 
         public void Add (Account account)
         {
-        
+
             _appDbContext.Accounts.Add(account);
         }
 
         public async Task<Account?> GetAsync (string userLogin)
         {
-            return await _appDbContext.Accounts.FirstOrDefaultAsync(a => a.LoginName == userLogin);
+            return await
+                _appDbContext
+                .Accounts
+                .Include(e => e.Email)
+                .FirstOrDefaultAsync(a => a.LoginName == userLogin);
         }
 
+        public async Task<bool> Exists (string userLogin, string userEmail)
+        {
+            return await
+                _appDbContext
+                .Accounts
+                .Include(e => e.Email)
+                .AnyAsync(a => a.LoginName == userLogin || a.Email.Value == userEmail);
+        }
         public async Task SaveChangesAsync ( )
         {
             await _appDbContext.SaveChangesAsync( );

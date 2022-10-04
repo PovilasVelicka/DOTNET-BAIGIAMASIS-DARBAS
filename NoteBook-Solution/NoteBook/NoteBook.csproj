@@ -22,4 +22,8 @@
     <ProjectReference Include="..\NoteBook.Entity\NoteBook.Entity.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\PeopleAdmin\DTOs\" />
+  </ItemGroup>
+
 </Project>

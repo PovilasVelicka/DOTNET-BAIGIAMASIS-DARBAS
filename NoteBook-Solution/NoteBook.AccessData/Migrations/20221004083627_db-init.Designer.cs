@@ -12,8 +12,8 @@ using NoteBook.Entity.Models;
 namespace NoteBook.AccessData.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221004080702_init-db")]
-    partial class initdb
+    [Migration("20221004083627_db-init")]
+    partial class dbinit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace NoteBook.Controllers.Notes
 {
-    [Route("api/[controller]")]
+    [Route("notebook")]
     [ApiController]
     public class NotesController : ControllerBase
     {

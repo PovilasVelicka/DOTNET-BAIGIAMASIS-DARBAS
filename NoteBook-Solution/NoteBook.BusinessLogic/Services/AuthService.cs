@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.Extensions.Logging;
 using NoteBook.BusinessLogic.DTOs;
 using NoteBook.Common.Interfaces.DTOs;
 using NoteBook.Common.Interfaces.Services;
@@ -12,10 +13,11 @@ namespace NoteBook.BusinessLogic.Services
     public class AuthService : IAuthService
     {
         private readonly IAccountsRepository _accountsRepository;
-
-        public AuthService (IAccountsRepository accountsRepository)
+        private readonly ILogger<AuthService> _logger;
+        public AuthService (IAccountsRepository accountsRepository, ILogger<AuthService> logger)
         {
             _accountsRepository = accountsRepository;
+            _logger = logger;
         }
 
         public async Task<IResponseDto<Account>> LoginAsync (string username, string password)
@@ -38,15 +40,26 @@ namespace NoteBook.BusinessLogic.Services
 
             var account = CreateAccount(loginName, password, email);
             _accountsRepository.Add(account);
-            await _accountsRepository.SaveChangesAsync( );
+            try
+            {
+                await _accountsRepository.SaveChangesAsync( );
+            }
+            catch (Exception e)
+            {
+                string message = $"Can't create user with: " +
+                    $"\n\tlogin-name: {loginName}" +
+                    $"\n\temail: {email}" +
+                    $"\n\terror: {e.Message} {e.InnerException}";
+                _logger.LogError(message);
+
+                return new AuthResponseDto(null, "Account creation error", 500);
+            }
 
             return new AuthResponseDto(account, (int)HttpStatusCode.OK);
-
         }
 
         private static Account CreateAccount (string loginName, string password, string email)
         {
-
             var (passwordHash, passwordSalt) = password.CreatePasswordHash( );
             return new Account
             {

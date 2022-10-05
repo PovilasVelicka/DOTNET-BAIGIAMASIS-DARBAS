@@ -37,7 +37,7 @@ namespace NoteBook.Entity.Models
             {
                 LocalPart = lp;
                 Domain = dm;
-                Value = email.ToUpper();
+                Value = email.ToLower();
             }
         }
     }

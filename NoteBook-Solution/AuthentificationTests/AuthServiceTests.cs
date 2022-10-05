@@ -45,8 +45,8 @@ namespace AuthentificationTests
                 .Callback<Account>(a => account = a);
 
             _accountRepositoryMock
-                .Setup(r => r.GetAsync(signUpDto.UserName))
-                .ReturnsAsync(default(Account)!);
+                .Setup(r => r.Exists(signUpDto.UserName,signUpDto.Email))
+                .ReturnsAsync(false);
 
             var signUpResponse = await _sut.SignupNewAccountAsync(signUpDto.UserName, signUpDto.Password, signUpDto.Email);
             Assert.True(signUpResponse.IsSuccess);
@@ -58,6 +58,9 @@ namespace AuthentificationTests
 
             var loginResponse = await _sut.LoginAsync(signUpDto.UserName, signUpDto.Password);
             Assert.True(loginResponse.IsSuccess);
+            _accountRepositoryMock.Verify(a=> a.Add(It.IsAny<Account>()), Times.Once());
+            _accountRepositoryMock.Verify(a => a.GetAsync(signUpDto.UserName), Times.Once( ));
+            _accountRepositoryMock.Verify(a => a.Exists(signUpDto.UserName, signUpDto.Email),Times.Once());
         }
 
         [Theory, AutoData]
@@ -69,8 +72,8 @@ namespace AuthentificationTests
                 .Callback<Account>(a => account = a);
 
             _accountRepositoryMock
-                .Setup(r => r.GetAsync(signUpDto.UserName))
-                .ReturnsAsync(default(Account)!);
+                 .Setup(r => r.Exists(signUpDto.UserName, signUpDto.Email))
+                 .ReturnsAsync(false);
 
             var signUpResponse = await _sut.SignupNewAccountAsync(signUpDto.UserName, signUpDto.Password, signUpDto.Email);
             Assert.True(signUpResponse.IsSuccess);
@@ -82,6 +85,9 @@ namespace AuthentificationTests
             var loginResponse = await _sut.LoginAsync(signUpDto.UserName, "incorrect-password");
             Assert.False(loginResponse.IsSuccess);
             Assert.Equal((int)HttpStatusCode.Unauthorized, loginResponse.StatuCode);
+            _accountRepositoryMock.Verify(a => a.Add(It.IsAny<Account>( )), Times.Once( ));
+            _accountRepositoryMock.Verify(a => a.GetAsync(signUpDto.UserName), Times.Once( ));
+            _accountRepositoryMock.Verify(a => a.Exists(signUpDto.UserName, signUpDto.Email), Times.Once( ));
 
         }
     }

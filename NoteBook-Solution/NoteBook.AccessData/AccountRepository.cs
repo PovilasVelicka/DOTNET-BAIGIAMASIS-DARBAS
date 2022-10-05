@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NoteBook.Common.Interfaces.AccessData;
 using NoteBook.Common.Interfaces.Services;
 using NoteBook.Entity.Enums;
 using NoteBook.Entity.Models;
@@ -7,9 +8,9 @@ namespace NoteBook.AccessData
 {
     public class AccountsRepository : IAccountsRepository
     {
-        private readonly AppDbContext _appDbContext;
+        private readonly IDbContext _appDbContext;
 
-        public AccountsRepository (AppDbContext appDbContext)
+        public AccountsRepository (IDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }

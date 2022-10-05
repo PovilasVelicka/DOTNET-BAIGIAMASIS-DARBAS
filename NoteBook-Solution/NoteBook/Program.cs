@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NoteBook.AccessData;
 using NoteBook.BusinessLogic.Services;
+using NoteBook.Common.Interfaces.AccessData;
 using NoteBook.Common.Interfaces.Services;
 using NoteBook.Entity.Models;
 using System.Text;
@@ -51,7 +51,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IAccountsRepository, AccountsRepository>( );
 builder.Services.AddScoped<IAuthService, AuthService>( );
 builder.Services.AddScoped<IJwtService, JwtService>( );
-
+builder.Services.AddScoped<IDbContext, AppDbContext>( );
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => options.TokenValidationParameters =

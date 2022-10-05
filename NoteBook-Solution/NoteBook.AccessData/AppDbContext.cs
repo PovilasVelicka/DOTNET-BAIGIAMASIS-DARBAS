@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using NoteBook.Common.Interfaces.AccessData;
 
 namespace NoteBook.Entity.Models
 {
-    public partial class AppDbContext : DbContext
+    public partial class AppDbContext : DbContext, IDbContext
     {
         public AppDbContext ( ) { }
 
@@ -17,6 +16,11 @@ namespace NoteBook.Entity.Models
         public virtual DbSet<FirstName> FirstNames { get; set; } = null!;
         public virtual DbSet<LastName> LastNames { get; set; } = null!;
         public virtual DbSet<Note> Notes { get; set; } = null!;
+
+        public override Task<int> SaveChangesAsync (CancellationToken cancellationToken = default)
+        {
+            return base.SaveChangesAsync(cancellationToken);
+        }
 
         protected override void OnModelCreating (ModelBuilder modelBuilder)
         {

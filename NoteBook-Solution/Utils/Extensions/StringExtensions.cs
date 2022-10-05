@@ -57,8 +57,6 @@ namespace Utils.Extensions
 
             try
             {
-
-
                 return Regex.IsMatch(email,
                     @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
                     RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));

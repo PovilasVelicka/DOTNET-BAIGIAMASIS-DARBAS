@@ -1,5 +1,8 @@
 ﻿using NoteBook.Common.Interfaces.DTOs;
 using NoteBook.Entity.Models;
+using System.Runtime.CompilerServices;
+
+[assembly:InternalsVisibleTo("AuthentificationTests")]
 
 namespace NoteBook.BusinessLogic.DTOs
 {

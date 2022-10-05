@@ -28,7 +28,8 @@ namespace NoteBook.Controllers.Authentification
                   signUpModel.UserName,
                   signUpModel.Password,
                   signUpModel.Email);
-            if (!response.IsSuccess) return StatusCode(response.StatuCode, response);
+
+            if (!response.IsSuccess) return StatusCode(response.StatuCode, response.Message);
             _logger.Log(LogLevel.Information, $"New user created: \n\tId: {response.Object!.Id}\n\tName: {response.Object!.LoginName}");
             return StatusCode(response.StatuCode,response.Message);
         }

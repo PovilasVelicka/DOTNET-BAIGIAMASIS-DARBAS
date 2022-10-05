@@ -7,7 +7,7 @@ namespace NoteBook.Entity.Models
 {
     [Table("Notes", Schema = "notebook")]
     [Index("Id", Name = "IX_Notes")]
-    [Index("UserId", "CategoryId", Name = "IX_Notes_UserId_CategoryId")]
+    [Index("AccountId", "CategoryId", Name = "IX_Notes_UserId_CategoryId")]
     public partial class Note
     {
         [Key]
@@ -27,13 +27,13 @@ namespace NoteBook.Entity.Models
         public bool Deleted { get; set; }
         public int DoPriority { get; set; }
         public int CategoryId { get; set; }
-        public Guid UserId { get; set; }
+        public Guid AccountId { get; set; }
 
-        [ForeignKey("UserId,CategoryId")]
+        [ForeignKey("AccountId,CategoryId")]
         [InverseProperty("Notes")]
         public virtual Category Category { get; set; } = null!;
-        [ForeignKey("UserId")]
+        [ForeignKey("AccountId")]
         [InverseProperty("Notes")]
-        public virtual AboutUser User { get; set; } = null!;
+        public virtual Account Account { get; set; } = null!;
     }
 }

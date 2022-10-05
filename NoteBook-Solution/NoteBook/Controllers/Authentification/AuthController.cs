@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NoteBook.Common.Interfaces.Services;
 using NoteBook.Controllers.Authentification.DTOs;
-using NoteBook.Entity.Models;
 using System.Net;
 
 namespace NoteBook.Controllers.Authentification
 {
     [Route("notebook")]
     [ApiController]
+    [AllowAnonymous]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
@@ -22,13 +23,13 @@ namespace NoteBook.Controllers.Authentification
         [HttpPost("signup")]
         public async Task<ActionResult> SignUp ([FromBody] SignupDto signUpModel)
         {
-          var account=  await _authService.SignupNewAccountAsync(
-                signUpModel.UserName,
-                signUpModel.Password,
-                signUpModel.Email);
-            if (!account.IsSuccess) return StatusCode((int)HttpStatusCode.BadRequest,account.Message);
+            var response = await _authService.SignupNewAccountAsync(
+                  signUpModel.UserName,
+                  signUpModel.Password,
+                  signUpModel.Email);
+            if (!response.IsSuccess) return StatusCode(response.StatuCode, response);
 
-            return StatusCode((int)HttpStatusCode.Created);
+            return StatusCode(response.StatuCode,response.Message);
         }
 
         [HttpPost("login")]
@@ -36,7 +37,11 @@ namespace NoteBook.Controllers.Authentification
         {
             var response = await _authService.LoginAsync(loginModel.UserName, loginModel.Password);
             if (!response.IsSuccess) return StatusCode(response.StatuCode, response.Message);
-            return StatusCode(response.StatuCode, _jwtService.GetJwtToken(loginModel.UserName,response.Object!.Role.ToString()));
+            return StatusCode(
+                response.StatuCode,
+                _jwtService.GetJwtToken(
+                    response.Object!.LoginName,
+                    response.Object!.Role.ToString( )));
         }
     }
 }

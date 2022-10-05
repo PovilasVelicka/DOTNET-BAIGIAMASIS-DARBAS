@@ -10,10 +10,7 @@ namespace NoteBook.Entity.Models
     [Index("LastNameId", Name = "IX_AboutUsers_LastNameId")]
     public partial class AboutUser
     {
-        public AboutUser ( )
-        {
-            Notes = new HashSet<Note>( );
-        }
+   
 
         [Key]
         public Guid Id { get; set; }
@@ -31,7 +28,6 @@ namespace NoteBook.Entity.Models
         [ForeignKey("LastNameId")]
         [InverseProperty("AboutUsers")]
         public virtual LastName LastName { get; set; } = null!;
-        [InverseProperty("User")]
-        public virtual ICollection<Note> Notes { get; set; }
+
     }
 }

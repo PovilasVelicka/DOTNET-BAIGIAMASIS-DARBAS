@@ -12,6 +12,7 @@ namespace NoteBook.Entity.Models
     {
         public Account ( )
         {
+            Notes = new HashSet<Note>( );
             AboutUsers = new HashSet<AboutUser>( );
         }
 
@@ -31,5 +32,8 @@ namespace NoteBook.Entity.Models
         public virtual Email Email { get; set; } = null!;
         [InverseProperty("Account")]
         public virtual ICollection<AboutUser> AboutUsers { get; set; }
+
+        [InverseProperty("Account")]
+        public virtual ICollection<Note> Notes { get; set; }
     }
 }

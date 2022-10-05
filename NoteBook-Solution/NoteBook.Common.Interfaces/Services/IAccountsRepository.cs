@@ -1,9 +1,5 @@
-﻿using NoteBook.Entity.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NoteBook.Entity.Enums;
+using NoteBook.Entity.Models;
 
 namespace NoteBook.Common.Interfaces.Services
 {
@@ -13,5 +9,6 @@ namespace NoteBook.Common.Interfaces.Services
         Task<Account?> GetAsync (string userLogin);
         Task SaveChangesAsync ( );
         Task<bool> Exists (string userLogin, string userEmail);
+        Task<List<Account>> GetByRoleAsync (Role role);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NoteBook.Common.Interfaces.Services;
+using NoteBook.Entity.Enums;
 using NoteBook.Entity.Models;
 
 namespace NoteBook.AccessData
@@ -36,9 +37,20 @@ namespace NoteBook.AccessData
                 .Include(e => e.Email)
                 .AnyAsync(a => a.LoginName == userLogin || a.Email.Value == userEmail);
         }
+
         public async Task SaveChangesAsync ( )
         {
             await _appDbContext.SaveChangesAsync( );
+        }
+
+        public async Task<List<Account>> GetByRoleAsync (Role role)
+        {
+            return await
+                _appDbContext
+                .Accounts
+                .Include(e => e.Email)
+                .Where(a => a.Role == role)
+                .ToListAsync( );
         }
     }
 }

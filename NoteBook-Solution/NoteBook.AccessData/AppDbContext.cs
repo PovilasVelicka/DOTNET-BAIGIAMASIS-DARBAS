@@ -42,7 +42,7 @@ namespace NoteBook.Entity.Models
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Notes)
-                    .HasForeignKey(d => new { d.UserId, d.CategoryId })
+                    .HasForeignKey(d => new { d.AccountId, d.CategoryId })
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Notes_Categories");
             });

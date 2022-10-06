@@ -54,11 +54,11 @@ namespace NoteBook.BusinessLogic.Services
             }
             catch (Exception e)
             {
-                string message = $"Can't create user with: " +
+                string errMessage = $"Can't create user with: " +
                     $"\n\tlogin-name: {loginName}" +
                     $"\n\temail: {email}" +
                     $"\n\terror: {e.Message} {e.InnerException}";
-                _logger.LogError(message);
+                _logger.LogError(message: errMessage);
 
                 return new AuthResponseDto(null, "Account creation error", 500);
             }

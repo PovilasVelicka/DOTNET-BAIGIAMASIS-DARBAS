@@ -8,9 +8,9 @@ namespace NoteBook.AccessData
 {
     public class AccountsRepository : IAccountsRepository
     {
-        private readonly IDbContext _appDbContext;
+        private readonly AppDbContext _appDbContext;
 
-        public AccountsRepository (IDbContext appDbContext)
+        public AccountsRepository (AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }

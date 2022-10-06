@@ -58,7 +58,7 @@ builder.Services.AddControllers( ).AddJsonOptions(opts =>
 builder.Services.AddScoped<IAccountsRepository, AccountsRepository>( );
 builder.Services.AddScoped<IAuthService, AuthService>( );
 builder.Services.AddScoped<IJwtService, JwtService>( );
-builder.Services.AddScoped<IDbContext, AppDbContext>( );
+// builder.Services.AddScoped<IDbContext, AppDbContext>( );
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => options.TokenValidationParameters =

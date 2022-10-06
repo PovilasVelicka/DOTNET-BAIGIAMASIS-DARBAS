@@ -10,6 +10,5 @@ namespace NoteBook.Controllers
             var allowedRolesAsStrings = roles.Select(x => Enum.GetName(typeof(Role), x));
             Roles = string.Join(",", allowedRolesAsStrings);
         }
-  
     }
 }

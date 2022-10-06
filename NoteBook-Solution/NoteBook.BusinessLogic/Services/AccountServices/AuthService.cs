@@ -9,7 +9,7 @@ using NoteBook.Entity.Models;
 using System.Net;
 using Utils.Extensions;
 
-namespace NoteBook.BusinessLogic.Services
+namespace NoteBook.BusinessLogic.Services.AccountServices
 {
     public class AuthService : IAuthService
     {

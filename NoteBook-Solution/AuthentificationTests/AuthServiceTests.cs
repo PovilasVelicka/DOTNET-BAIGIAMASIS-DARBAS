@@ -2,7 +2,7 @@ using AutoFixture;
 using AutoFixture.Xunit2;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NoteBook.BusinessLogic.Services;
+using NoteBook.BusinessLogic.Services.AccountServices;
 using NoteBook.Common.Interfaces.DataAccess;
 using NoteBook.Common.Interfaces.Services;
 using NoteBook.Controllers.Authentification.DTOs;

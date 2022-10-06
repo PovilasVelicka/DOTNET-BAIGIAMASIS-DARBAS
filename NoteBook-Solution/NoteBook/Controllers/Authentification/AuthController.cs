@@ -15,6 +15,7 @@ namespace NoteBook.Controllers.Authentification
         private readonly IAuthService _authService;
         private readonly IJwtService _jwtService;
         private readonly ILogger<AuthController> _logger;
+
         public AuthController (IAuthService authService, IJwtService jwtService, ILogger<AuthController> logger)
         {
             _authService = authService;
@@ -38,6 +39,7 @@ namespace NoteBook.Controllers.Authentification
                     $"\n\tId: {serviceResponse.Object!.Id}" +
                     $"\n\tName: {serviceResponse.Object!.LoginName}");
             }
+
             return GetResponse(serviceResponse);
         }
 

@@ -6,7 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace NoteBook.BusinessLogic.Services
+namespace NoteBook.BusinessLogic.Services.AccountServices
 {
     public class JwtService : IJwtService
     {

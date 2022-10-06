@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NoteBook.AccessData;
-using NoteBook.BusinessLogic.Services;
+using NoteBook.BusinessLogic.Services.AccountServices;
 using NoteBook.Common.Interfaces.AccessData;
 using NoteBook.Common.Interfaces.DataAccess;
 using NoteBook.Common.Interfaces.Services;

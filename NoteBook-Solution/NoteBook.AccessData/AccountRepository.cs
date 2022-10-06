@@ -3,6 +3,7 @@ using NoteBook.Common.Interfaces.AccessData;
 using NoteBook.Common.Interfaces.DataAccess;
 using NoteBook.Entity.Enums;
 using NoteBook.Entity.Models;
+using System.Data;
 
 namespace NoteBook.AccessData
 {
@@ -44,7 +45,7 @@ namespace NoteBook.AccessData
             await _appDbContext.SaveChangesAsync( );
         }
 
-        public async Task<List<Account>> GetByRoleAsync (Role role)
+        public async Task<List<Account>?> GetByRoleAsync (Role role)
         {
             return await
                 _appDbContext
@@ -57,6 +58,16 @@ namespace NoteBook.AccessData
         public  Task<int> CountRoleAsync (Role role)
         {
             return  _appDbContext.Accounts.Where(a=> a.Role == role).CountAsync();
+        }
+
+        public async Task<List<Account>?> GetByNameSubstringAsync (string name)
+        {
+            return await
+             _appDbContext
+             .Accounts
+             .Include(e => e.Email)
+             .Where(a => a.LoginName.Contains(name) || a.Email.Value.Contains(name))
+             .ToListAsync( );
         }
     }
 }

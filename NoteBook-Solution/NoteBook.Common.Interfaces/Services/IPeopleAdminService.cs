@@ -11,6 +11,6 @@ namespace NoteBook.Common.Interfaces.Services
 {
     public interface IPeopleAdminService
     {
-        Task<IResponseDto<Account>> ChangeUserRoleAsync (string loginName, Role role);
+        Task<IResponse<Account>> ChangeUserRoleAsync (string loginName, Role role);
     }
 }

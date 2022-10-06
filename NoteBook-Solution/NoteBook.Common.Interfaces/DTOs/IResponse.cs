@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NoteBook.Common.Interfaces.DTOs
 {
-    public interface IResponseDto<T>
+    public interface IResponse<T>
     {
         bool IsSuccess { get; }
         string  Message { get; }

@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace NoteBook.BusinessLogic.DTOs
 {
-    internal class AuthResponseDto : IResponseDto<Account>
+    internal class AuthResponseDto : IResponse<Account>
     {
         public bool IsSuccess { get; }
 

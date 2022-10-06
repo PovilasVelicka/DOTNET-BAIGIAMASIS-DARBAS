@@ -24,6 +24,7 @@ namespace NoteBook.Entity.Models
         public bool EmailVerified { get; set; }
         public byte[ ] PasswordHash { get; set; } = null!;
         public byte[ ] PasswordSalt { get; set; } = null!;
+        [StringLength(50)]
         public Role Role { get; set; }
         public bool Disabled { get; set; }
 

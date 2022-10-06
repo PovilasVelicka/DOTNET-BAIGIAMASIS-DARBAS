@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NoteBook.Entity.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace NoteBook.Common.Interfaces.Services
 {
     public interface IJwtService
     {
-        string GetJwtToken (string username,string role);
+        string GetJwtToken (Account accont);
     }
 }

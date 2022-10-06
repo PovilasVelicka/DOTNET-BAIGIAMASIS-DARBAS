@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NoteBook.Common.Interfaces.AccessData;
+using NoteBook.Entity.Enums;
 
 namespace NoteBook.Entity.Models
 {
@@ -27,6 +28,11 @@ namespace NoteBook.Entity.Models
             modelBuilder.Entity<Account>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever( );
+                // convert enum to string and back to enum (upload, download)
+                entity.Property(p => p.Role)
+                .HasConversion(
+                    u => u.ToString( ),
+                    d => (Role)Enum.Parse(typeof(Role), d));
             });
 
             modelBuilder.Entity<Category>(entity =>

@@ -16,7 +16,7 @@ namespace NoteBook.BusinessLogic.Services
             _accountsRepository = accountsRepository;
         }
 
-        public async Task<IResponseDto<Account>> ChangeUserRoleAsync (string loginName, Role role)
+        public async Task<IResponse<Account>> ChangeUserRoleAsync (string loginName, Role role)
         {
             var account  = await _accountsRepository.GetAsync(loginName);
             if (account == null) return new AuthResponseDto(null, "User not found", (int)HttpStatusCode.NotFound);

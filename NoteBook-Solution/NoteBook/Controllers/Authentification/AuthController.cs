@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NoteBook.Common.Interfaces.DTOs;
 using NoteBook.Common.Interfaces.Services;
 using NoteBook.Controllers.Authentification.DTOs;
-using System.Net;
+using NoteBook.Entity.Models;
 
 namespace NoteBook.Controllers.Authentification
 {
@@ -24,29 +25,54 @@ namespace NoteBook.Controllers.Authentification
         [HttpPost("signup")]
         public async Task<ActionResult> SignUp ([FromBody] SignupDto signUpModel)
         {
-            var response = await _authService.SignupNewAccountAsync(
+            var serviceResponse = await _authService.SignupNewAccountAsync(
                   signUpModel.UserName,
                   signUpModel.Password,
                   signUpModel.Email);
 
-            if (!response.IsSuccess) return StatusCode(response.StatuCode, response.Message);
-
-            _logger.Log(LogLevel.Information, $"New user created: \n\tId: {response.Object!.Id}\n\tName: {response.Object!.LoginName}");
-
-            return StatusCode(response.StatuCode,response.Message);
+            if (serviceResponse.IsSuccess)
+            {
+                _logger.Log(
+                    LogLevel.Information,
+                    $"New user created: " +
+                    $"\n\tId: {serviceResponse.Object!.Id}" +
+                    $"\n\tName: {serviceResponse.Object!.LoginName}");
+            }
+            return GetResponse(serviceResponse);
         }
 
         [HttpPost("login")]
         public async Task<ActionResult> Login ([FromBody] LoginDto loginModel)
         {
-            var response = await _authService.LoginAsync(loginModel.UserName, loginModel.Password);
-            if (!response.IsSuccess) return StatusCode(response.StatuCode, response.Message);
+            var serviceResponse = await _authService.LoginAsync(loginModel.UserName, loginModel.Password);
+            return GetResponse(serviceResponse);
+        }
 
-            return StatusCode(
-                response.StatuCode,
-                _jwtService.GetJwtToken(
-                    response.Object!.LoginName,
-                    response.Object!.Role.ToString( )));
+        private ObjectResult GetResponse (IResponse<Account> serviceResponse)
+        {
+            if (serviceResponse.IsSuccess)
+            {
+                return StatusCode(
+                    serviceResponse.StatuCode,
+                    new ResponseDto
+                    {
+                        IsSuccess = serviceResponse.IsSuccess,
+                        Error = serviceResponse.Message,
+                        Token = _jwtService.GetJwtToken(serviceResponse.Object!)
+                    });
+            }
+            else
+            {
+                return StatusCode(
+                   serviceResponse.StatuCode,
+                   new ResponseDto
+                   {
+                       IsSuccess = serviceResponse.IsSuccess,
+                       Error = serviceResponse.Message,
+                       Token = null,
+                   });
+            }
+
         }
     }
 }

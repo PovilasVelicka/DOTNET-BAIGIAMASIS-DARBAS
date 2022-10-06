@@ -8,6 +8,7 @@ using NoteBook.Common.Interfaces.AccessData;
 using NoteBook.Common.Interfaces.Services;
 using NoteBook.Entity.Models;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +48,11 @@ builder.Services.AddSwaggerGen(opions =>
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("NoteBookDb")));
 
+builder.Services.AddControllers( ).AddJsonOptions(opts =>
+{
+    var enumConverter = new JsonStringEnumConverter( );
+    opts.JsonSerializerOptions.Converters.Add(enumConverter);
+});
 
 builder.Services.AddScoped<IAccountsRepository, AccountsRepository>( );
 builder.Services.AddScoped<IAuthService, AuthService>( );

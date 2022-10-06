@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NoteBook.Common.Interfaces.AccessData;
-using NoteBook.Common.Interfaces.Services;
+using NoteBook.Common.Interfaces.DataAccess;
 using NoteBook.Entity.Enums;
 using NoteBook.Entity.Models;
 
@@ -21,22 +21,22 @@ namespace NoteBook.AccessData
             _appDbContext.Accounts.Add(account);
         }
 
-        public async Task<Account?> GetAsync (string userLogin)
+        public async Task<Account?> GetByNameAsync (string userLogin)
         {
             return await
                 _appDbContext
                 .Accounts
                 .Include(e => e.Email)
-                .FirstOrDefaultAsync(a => a.LoginName == userLogin);
+                .SingleOrDefaultAsync(a => a.LoginName == userLogin);
         }
 
-        public async Task<bool> Exists (string userLogin, string userEmail)
+        public async Task<Account?> GetByEmailAsync ( string userEmail)
         {
             return await
                 _appDbContext
                 .Accounts
                 .Include(e => e.Email)
-                .AnyAsync(a => a.LoginName == userLogin || a.Email.Value == userEmail);
+                .SingleOrDefaultAsync(a => a.Email.Value == userEmail);
         }
 
         public async Task SaveChangesAsync ( )
@@ -52,6 +52,11 @@ namespace NoteBook.AccessData
                 .Include(e => e.Email)
                 .Where(a => a.Role == role)
                 .ToListAsync( );
+        }
+
+        public  Task<int> CountRoleAsync (Role role)
+        {
+            return  _appDbContext.Accounts.Where(a=> a.Role == role).CountAsync();
         }
     }
 }

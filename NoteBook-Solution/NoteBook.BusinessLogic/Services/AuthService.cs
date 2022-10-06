@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.Extensions.Logging;
 using NoteBook.BusinessLogic.DTOs;
+using NoteBook.Common.Interfaces.DataAccess;
 using NoteBook.Common.Interfaces.DTOs;
 using NoteBook.Common.Interfaces.Services;
 using NoteBook.Entity.Enums;
@@ -22,7 +23,7 @@ namespace NoteBook.BusinessLogic.Services
 
         public async Task<IResponse<Account>> LoginAsync (string username, string password)
         {
-            var account = await _accountsRepository.GetAsync(username);
+            var account = await _accountsRepository.GetByNameAsync(username);
             if (account == null) return new AuthResponseDto(null, "User name not exists", (int)HttpStatusCode.NotFound);
             if (!password.VerifyPassword(account.PasswordHash, account.PasswordSalt))
             {
@@ -33,12 +34,19 @@ namespace NoteBook.BusinessLogic.Services
 
         public async Task<IResponse<Account>> SignupNewAccountAsync (string loginName, string password, string email)
         {
-            if (await _accountsRepository.Exists(loginName, email))
+            if (await _accountsRepository.GetByNameAsync(loginName) != null)
             {
-                return new AuthResponseDto(null, "User name or email already exists", (int)HttpStatusCode.BadRequest);
+                return new AuthResponseDto(null, "User name already exists", (int)HttpStatusCode.BadRequest);
             }
 
-            var account = CreateAccount(loginName, password, email);
+            if (await _accountsRepository.GetByEmailAsync(email) != null)
+            {
+                return new AuthResponseDto(null, "User email already exists", (int)HttpStatusCode.BadRequest);
+            }
+            var adminCount = await _accountsRepository.CountRoleAsync(Role.PeopleAdmin);
+
+            var account = CreateAccount(loginName, password, email, adminCount == 0 ? Role.PeopleAdmin : Role.Guest);
+
             _accountsRepository.Add(account);
             try
             {
@@ -58,9 +66,10 @@ namespace NoteBook.BusinessLogic.Services
             return new AuthResponseDto(account, (int)HttpStatusCode.OK);
         }
 
-        private static Account CreateAccount (string loginName, string password, string email)
+        private static Account CreateAccount (string loginName, string password, string email, Role role)
         {
             var (passwordHash, passwordSalt) = password.CreatePasswordHash( );
+
             return new Account
             {
                 Id = Guid.NewGuid( ),
@@ -68,7 +77,7 @@ namespace NoteBook.BusinessLogic.Services
                 Email = new Email(email),
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
-                Role = Role.Guest,
+                Role = role,
                 Disabled = false,
                 EmailVerified = false,
             };

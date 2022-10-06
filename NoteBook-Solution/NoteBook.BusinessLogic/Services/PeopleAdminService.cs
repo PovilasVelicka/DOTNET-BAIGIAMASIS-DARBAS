@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NoteBook.BusinessLogic.DTOs;
+using NoteBook.Common.Interfaces.DataAccess;
 using NoteBook.Common.Interfaces.DTOs;
 using NoteBook.Common.Interfaces.Services;
 using NoteBook.Entity.Enums;
@@ -18,7 +19,7 @@ namespace NoteBook.BusinessLogic.Services
 
         public async Task<IResponse<Account>> ChangeUserRoleAsync (string loginName, Role role)
         {
-            var account  = await _accountsRepository.GetAsync(loginName);
+            var account  = await _accountsRepository.GetByNameAsync(loginName);
             if (account == null) return new AuthResponseDto(null, "User not found", (int)HttpStatusCode.NotFound);
             account.Role = role;
             await _accountsRepository.SaveChangesAsync( );

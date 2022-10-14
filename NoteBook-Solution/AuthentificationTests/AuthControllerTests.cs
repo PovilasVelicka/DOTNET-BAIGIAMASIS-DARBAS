@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NoteBook.BusinessLogic.DTOs;
+using NoteBook.BusinessLogic.AuthServices.DTOs;
 using NoteBook.Common.Interfaces.Services;
 using NoteBook.Controllers.Authentification;
 using NoteBook.Controllers.Authentification.DTOs;

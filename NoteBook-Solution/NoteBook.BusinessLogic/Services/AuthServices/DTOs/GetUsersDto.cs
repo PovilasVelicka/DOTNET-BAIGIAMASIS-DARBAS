@@ -2,7 +2,7 @@
 using NoteBook.Entity.Models;
 using System.Net;
 
-namespace NoteBook.BusinessLogic.Services.AccountServices.DTOs
+namespace NoteBook.BusinessLogic.Services.AuthServices.DTOs
 {
     internal class GetUsersDto : IResponse<List<Account>>
     {

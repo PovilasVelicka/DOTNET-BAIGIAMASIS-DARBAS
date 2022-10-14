@@ -1,6 +1,6 @@
 ﻿
 using Microsoft.Extensions.Logging;
-using NoteBook.BusinessLogic.DTOs;
+using NoteBook.BusinessLogic.AuthServices.DTOs;
 using NoteBook.Common.Interfaces.DataAccess;
 using NoteBook.Common.Interfaces.DTOs;
 using NoteBook.Common.Interfaces.Services;
@@ -9,7 +9,7 @@ using NoteBook.Entity.Models;
 using System.Net;
 using Utils.Extensions;
 
-namespace NoteBook.BusinessLogic.Services.AccountServices
+namespace NoteBook.BusinessLogic.Services.AuthServices
 {
     public class AuthService : IAuthService
     {

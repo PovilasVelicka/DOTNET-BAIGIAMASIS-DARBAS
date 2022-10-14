@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NoteBook.Common.Interfaces.DataAccess;
 using NoteBook.Common.Interfaces.DTOs;
 using NoteBook.Common.Interfaces.Services;
+using NoteBook.Controllers.Attributes;
 using NoteBook.Controllers.PeopleAdmin.DTOs;
 using NoteBook.Entity.Enums;
 using NoteBook.Entity.Models;
@@ -15,21 +15,30 @@ namespace NoteBook.Controllers.PeopleAdmin
     {
         private readonly IPeopleAdminService _adminService;
 
-        public PeopleAdminController (IPeopleAdminService peopleAdminService )
+        public PeopleAdminController (IPeopleAdminService peopleAdminService)
         {
             _adminService = peopleAdminService;
         }
 
         [HttpGet("users/{role}")]
-        public async Task<ActionResult<UserDto>> GetUsersByRole(Role userRole)
+        public async Task<ActionResult<UserDto>> GetUsersByRole ([FromRoute] Role userRole)
         {
-            var serviceResponse =  await _adminService.FindUsersAsync(userRole);
-            serviceResponse.Object.Select(u => new UserDto
+            var serviceResponse = await _adminService.FindUsersAsync(userRole);
+            if (serviceResponse.IsSuccess)
             {
-                Email = u.Email.Value,
-                LoginName = u.LoginName,
-                UserRole = u.Role,
-            });
+                serviceResponse.Object!.Select(u => new UserDto
+                {
+                    Email = u.Email.Value,
+                    LoginName = u.LoginName,
+                    UserRole = u.Role,
+                });
+                return StatusCode(serviceResponse.StatuCode, serviceResponse.Object);
+            }
+            else
+            {
+                return StatusCode(serviceResponse.StatuCode, serviceResponse.Message);
+            }
+
         }
 
         private ObjectResult GetResponse (IResponse<List<Account>?> response)
@@ -45,6 +54,7 @@ namespace NoteBook.Controllers.PeopleAdmin
             }
             else
             {
+                return StatusCode(response.StatuCode, response.Message);
 
             }
         }

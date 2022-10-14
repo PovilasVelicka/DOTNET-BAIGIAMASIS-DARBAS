@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 [assembly:InternalsVisibleTo("AuthentificationTests")]
 
-namespace NoteBook.BusinessLogic.DTOs
+namespace NoteBook.BusinessLogic.AuthServices.DTOs
 {
     internal class AuthResponseDto : IResponse<Account>
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NoteBook.Controllers.Attributes;
 using NoteBook.Entity.Enums;
-using System;
 
 namespace NoteBook.Controllers.Categories
 {
@@ -12,7 +12,7 @@ namespace NoteBook.Controllers.Categories
     public class CategoriesController : ControllerBase
     {
         [HttpGet("category/{id}")]
-        public IActionResult Get(int id)
+        public IActionResult Get (int id)
         {
             return Ok( );
         }

@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NoteBook.AccessData;
-using NoteBook.BusinessLogic.Services.AccountServices;
+using NoteBook.BusinessLogic.Services.AuthServices;
+using NoteBook.BusinessLogic.Services.PeopleAdmin;
 using NoteBook.Common.Interfaces.AccessData;
 using NoteBook.Common.Interfaces.DataAccess;
 using NoteBook.Common.Interfaces.Services;
@@ -58,6 +59,7 @@ builder.Services.AddControllers( ).AddJsonOptions(opts =>
 builder.Services.AddScoped<IAccountsRepository, AccountsRepository>( );
 builder.Services.AddScoped<IAuthService, AuthService>( );
 builder.Services.AddScoped<IJwtService, JwtService>( );
+builder.Services.AddScoped<IPeopleAdminService, PeopleAdminService>( );
 // builder.Services.AddScoped<IDbContext, AppDbContext>( );
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

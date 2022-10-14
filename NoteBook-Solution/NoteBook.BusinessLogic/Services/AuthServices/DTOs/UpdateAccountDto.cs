@@ -1,6 +1,6 @@
 ﻿using NoteBook.Common.Interfaces.DTOs;
 
-namespace NoteBook.BusinessLogic.Services.AccountServices.DTOs
+namespace NoteBook.BusinessLogic.Services.AuthServices.DTOs
 {
     internal class UpdateAccountDto : IResponse<string>
     {

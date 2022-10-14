@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using NoteBook.Entity.Enums;
 
-namespace NoteBook.Controllers
+namespace NoteBook.Controllers.Attributes
 {
     public class AuthorizeRoles : AuthorizeAttribute
     {
-        public AuthorizeRoles (params Role[ ] roles)
+        public AuthorizeRoles(params Role[] roles)
         {
             var allowedRolesAsStrings = roles.Select(x => Enum.GetName(typeof(Role), x));
             Roles = string.Join(",", allowedRolesAsStrings);

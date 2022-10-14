@@ -4,7 +4,7 @@ namespace NoteBook.Controllers.PeopleAdmin.DTOs
 {
     public class ChangeRoleDto
     {
-        public Guid UserId { get; set; }
+        public String UserLogin { get; set; } = null!;
         public Role Role { get; set; }
     }
 }

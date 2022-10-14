@@ -1,16 +1,16 @@
 ﻿using Microsoft.Extensions.Logging;
-using NoteBook.BusinessLogic.AuthServices.DTOs;
+using NoteBook.BusinessLogic.Services.DTOs;
 using NoteBook.Common.Interfaces.DataAccess;
 using NoteBook.Common.Interfaces.DTOs;
 using NoteBook.Common.Interfaces.Services;
 using NoteBook.Entity.Enums;
 using NoteBook.Entity.Models;
 using System.Net;
-using Utils.Extensions;
+using Utilites.Exstensions;
 
 namespace NoteBook.BusinessLogic.Services.AuthServices
 {
-    internal class AuthService : IAuthService
+    public class AuthService : IAuthService
     {
         private readonly IAccountsRepository _accountsRepository;
         private readonly ILogger<AuthService> _logger;

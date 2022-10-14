@@ -2,9 +2,9 @@
 using NoteBook.Entity.Models;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("AuthentificationTests")]
+[assembly:InternalsVisibleTo("AuthentificationTests")]
 
-namespace NoteBook.BusinessLogic.AuthServices.DTOs
+namespace NoteBook.BusinessLogic.Services.DTOs
 {
     internal class AuthResponseDto : IResponse<Account>
     {

@@ -1,14 +1,14 @@
 ﻿using AutoFixture.Xunit2;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NoteBook.BusinessLogic.AuthServices.DTOs;
+using NoteBook.BusinessLogic.Services.DTOs;
 using NoteBook.Common.Interfaces.Services;
 using NoteBook.Controllers.Authentification;
 using NoteBook.Controllers.Authentification.DTOs;
-using System.Net;
 using NoteBook.Entity.Models;
+using System.Net;
+
 namespace AuthentificationTests
 {
     public class AuthControllerTests
@@ -44,12 +44,12 @@ namespace AuthentificationTests
         public async Task SignUp_WhenUserNotExists_ResponseOk (SignupDto signupDto)
         {
             _authServiceMock
-                .Setup(a => a.SignupNewAccountAsync(signupDto.UserName, signupDto.Password,signupDto.Email))
-                .ReturnsAsync(new AuthResponseDto(new Account(), "UserCreated", 200));
+                .Setup(a => a.SignupNewAccountAsync(signupDto.UserName, signupDto.Password, signupDto.Email))
+                .ReturnsAsync(new AuthResponseDto(new Account( ), "UserCreated", 200));
 
             var response = await _sut.SignUp(signupDto);
             var responseObject = response as ObjectResult;
-            
+
             Assert.Equal((int)HttpStatusCode.OK, responseObject!.StatusCode);
         }
     }

@@ -8,7 +8,7 @@ using NoteBook.Entity.Models;
 
 namespace NoteBook.Controllers.PeopleAdmin
 {
-    [Route("notebook")]
+    [Route("notebook/admin")]
     [ApiController]
     [AuthorizeRoles(Role.PeopleAdmin)]
     public class PeopleAdminController : ControllerBase
@@ -20,14 +20,28 @@ namespace NoteBook.Controllers.PeopleAdmin
             _adminService = peopleAdminService;
         }
 
-        [HttpGet("users/{userRole}")]
-        public async Task<ActionResult<UserDto>> GetUsersByRole (Role userRole)
+        [HttpGet("users/by-role/{userRole}")]
+        public async Task<ActionResult> GetUsersByRole (Role userRole)
         {
             var serviceResponse = await _adminService.FindUsersAsync(userRole);
-            return ConertToActionResult(serviceResponse);
+            return ConvertToActionResult(serviceResponse);
         }
 
-        private ObjectResult ConertToActionResult (IResponse<List<Account>> response)
+        [HttpGet("users/by-name/{userName}")]
+        public async Task<ActionResult> GetUsersByName (string userName)
+        {
+            var serviceResponse = await _adminService.FindUsersAsync(userName);
+            return ConvertToActionResult(serviceResponse);
+        }
+
+        [HttpPatch("users/change-role")]
+        public async Task<ActionResult> UpdateUserRole ([FromBody] ChangeRoleDto userRoleDto)
+        {
+            var serviceResponse = await _adminService.ChangeUserRoleAsync(userRoleDto.UserLogin, userRoleDto.Role);
+            return ConvertToActionResult(serviceResponse);
+        }
+
+        private ObjectResult ConvertToActionResult (IResponse<List<Account>> response)
         {
             if (response.IsSuccess)
             {
@@ -37,6 +51,23 @@ namespace NoteBook.Controllers.PeopleAdmin
                     LoginName = u.LoginName,
                     UserRole = u.Role,
                 }));
+            }
+            else
+            {
+                return StatusCode(response.StatuCode, response.Message);
+            }
+        }
+
+        private ObjectResult ConvertToActionResult (IResponse<Account> response)
+        {
+            if (response.IsSuccess)
+            {
+                return StatusCode(response.StatuCode, new UserDto
+                {
+                    Email = response.Object!.Email.Value,
+                    LoginName = response.Object!.LoginName,
+                    UserRole = response.Object!.Role,
+                });
             }
             else
             {

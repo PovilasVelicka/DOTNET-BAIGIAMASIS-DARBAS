@@ -2,7 +2,7 @@
 using NoteBook.Entity.Models;
 using System.Net;
 
-namespace NoteBook.BusinessLogic.Services.AuthServices.DTOs
+namespace NoteBook.BusinessLogic.Services.DTOs
 {
     internal class GetUsersDto : IResponse<List<Account>>
     {
@@ -14,7 +14,7 @@ namespace NoteBook.BusinessLogic.Services.AuthServices.DTOs
 
         public int StatuCode { get; }
 
-        public GetUsersDto (List<Account>? accounts)
+        public GetUsersDto(List<Account>? accounts)
         {
             IsSuccess = accounts != null;
             Message = accounts != null ? "" : "Not found";

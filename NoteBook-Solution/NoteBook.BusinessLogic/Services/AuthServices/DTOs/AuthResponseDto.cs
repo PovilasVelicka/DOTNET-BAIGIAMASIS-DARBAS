@@ -2,7 +2,7 @@
 using NoteBook.Entity.Models;
 using System.Runtime.CompilerServices;
 
-[assembly:InternalsVisibleTo("AuthentificationTests")]
+[assembly: InternalsVisibleTo("AuthentificationTests")]
 
 namespace NoteBook.BusinessLogic.AuthServices.DTOs
 {
@@ -13,9 +13,9 @@ namespace NoteBook.BusinessLogic.AuthServices.DTOs
         public string Message { get; }
 
         public Account? Object { get; }
-        public int StatuCode { get;  }
+        public int StatuCode { get; }
 
-        public AuthResponseDto (Account? account,  string message, int statuCode)
+        public AuthResponseDto (Account? account, string message, int statuCode)
         {
             Message = message;
             IsSuccess = account != null;

@@ -10,7 +10,7 @@ namespace NoteBook.Entity.Models
     [Index("LastNameId", Name = "IX_AboutUsers_LastNameId")]
     public partial class AboutUser
     {
-   
+
 
         [Key]
         public Guid Id { get; set; }

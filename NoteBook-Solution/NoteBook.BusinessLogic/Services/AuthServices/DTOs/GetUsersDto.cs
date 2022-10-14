@@ -14,7 +14,7 @@ namespace NoteBook.BusinessLogic.Services.AuthServices.DTOs
 
         public int StatuCode { get; }
 
-        public GetUsersDto(List<Account>? accounts)
+        public GetUsersDto (List<Account>? accounts)
         {
             IsSuccess = accounts != null;
             Message = accounts != null ? "" : "Not found";

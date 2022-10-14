@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NoteBook.Entity.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

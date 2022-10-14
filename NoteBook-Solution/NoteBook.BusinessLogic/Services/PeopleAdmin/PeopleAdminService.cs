@@ -8,7 +8,7 @@ using System.Net;
 
 namespace NoteBook.BusinessLogic.Services.PeopleAdmin
 {
-    public class PeopleAdminService : IPeopleAdminService
+    internal class PeopleAdminService : IPeopleAdminService
     {
         private readonly IAccountsRepository _repository;
         public PeopleAdminService(IAccountsRepository repository)

@@ -9,9 +9,9 @@ namespace NoteBook.Entity.Models
     [Index("Value", Name = "UI_FirstName", IsUnique = true)]
     public partial class FirstName
     {
-        public FirstName()
+        public FirstName ( )
         {
-            AboutUsers = new HashSet<AboutUser>();
+            AboutUsers = new HashSet<AboutUser>( );
         }
 
         [Key]
@@ -22,10 +22,10 @@ namespace NoteBook.Entity.Models
         [InverseProperty("FirstName")]
         public virtual ICollection<AboutUser> AboutUsers { get; set; }
 
-        public FirstName(string firstname)
+        public FirstName (string firstname)
         {
-            AboutUsers = new HashSet<AboutUser>();
-            Value = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(firstname.ToLower());
+            AboutUsers = new HashSet<AboutUser>( );
+            Value = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(firstname.ToLower( ));
         }
     }
 

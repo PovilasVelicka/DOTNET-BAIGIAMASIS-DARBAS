@@ -12,7 +12,7 @@ namespace NoteBook.BusinessLogic.Services.AuthServices.DTOs
 
         public int StatuCode { get; }
 
-        public UpdateAccountDto(bool isSuccess, string message, int statuCode)
+        public UpdateAccountDto (bool isSuccess, string message, int statuCode)
         {
             IsSuccess = isSuccess;
             Message = message;

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace NoteBook.BusinessLogic.Services.AuthServices
 {
-    public class JwtService : IJwtService
+    internal class JwtService : IJwtService
     {
         private readonly IConfiguration _configuration;
         public JwtService (IConfiguration configuration)

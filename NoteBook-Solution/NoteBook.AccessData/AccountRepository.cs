@@ -7,7 +7,7 @@ using System.Data;
 
 namespace NoteBook.AccessData
 {
-    public class AccountsRepository : IAccountsRepository
+    internal class AccountsRepository : IAccountsRepository
     {
         private readonly AppDbContext _appDbContext;
 

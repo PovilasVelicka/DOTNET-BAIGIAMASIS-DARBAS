@@ -18,13 +18,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteBook.Common.Interfaces"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteBook.BusinessLogic", "NoteBook.BusinessLogic\NoteBook.BusinessLogic.csproj", "{3C35EE0F-D1FD-4253-9A41-F8F1FDBCA9D9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils", "Utils\Utils.csproj", "{CCDE61D0-9211-4133-A686-80C349B07501}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilites", "Utils\Utilites.csproj", "{CCDE61D0-9211-4133-A686-80C349B07501}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{ECF37AFF-B1B4-4142-B707-C22469AD2507}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EntityTests", "EntityTests\EntityTests.csproj", "{9721E6FB-CA1A-4245-8AF0-71CD470D756A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthentificationTests", "AuthentificationTests\AuthentificationTests.csproj", "{C3FE7DA5-9D7E-4BC3-8087-1BDD6DAD7B06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthentificationTests", "AuthentificationTests\AuthentificationTests.csproj", "{C3FE7DA5-9D7E-4BC3-8087-1BDD6DAD7B06}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

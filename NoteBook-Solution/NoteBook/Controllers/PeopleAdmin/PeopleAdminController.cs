@@ -20,28 +20,14 @@ namespace NoteBook.Controllers.PeopleAdmin
             _adminService = peopleAdminService;
         }
 
-        [HttpGet("users/{role}")]
-        public async Task<ActionResult<UserDto>> GetUsersByRole ([FromRoute] Role userRole)
+        [HttpGet("users/{userRole}")]
+        public async Task<ActionResult<UserDto>> GetUsersByRole (Role userRole)
         {
             var serviceResponse = await _adminService.FindUsersAsync(userRole);
-            if (serviceResponse.IsSuccess)
-            {
-                serviceResponse.Object!.Select(u => new UserDto
-                {
-                    Email = u.Email.Value,
-                    LoginName = u.LoginName,
-                    UserRole = u.Role,
-                });
-                return StatusCode(serviceResponse.StatuCode, serviceResponse.Object);
-            }
-            else
-            {
-                return StatusCode(serviceResponse.StatuCode, serviceResponse.Message);
-            }
-
+            return ConertToActionResult(serviceResponse);
         }
 
-        private ObjectResult GetResponse (IResponse<List<Account>?> response)
+        private ObjectResult ConertToActionResult (IResponse<List<Account>> response)
         {
             if (response.IsSuccess)
             {
@@ -55,9 +41,7 @@ namespace NoteBook.Controllers.PeopleAdmin
             else
             {
                 return StatusCode(response.StatuCode, response.Message);
-
             }
         }
-
     }
 }

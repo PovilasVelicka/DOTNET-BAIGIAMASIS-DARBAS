@@ -1,4 +1,4 @@
-﻿namespace NoteBook.Controllers.Authentification.DTOs
+﻿namespace NoteBook.Controllers.AuthController.DTOs
 {
     public class SignupDto
     {

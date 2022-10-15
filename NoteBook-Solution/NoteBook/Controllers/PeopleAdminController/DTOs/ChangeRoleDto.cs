@@ -1,6 +1,6 @@
 ﻿using NoteBook.Entity.Enums;
 
-namespace NoteBook.Controllers.PeopleAdmin.DTOs
+namespace NoteBook.Controllers.PeopleAdminController.DTOs
 {
     public class ChangeRoleDto
     {

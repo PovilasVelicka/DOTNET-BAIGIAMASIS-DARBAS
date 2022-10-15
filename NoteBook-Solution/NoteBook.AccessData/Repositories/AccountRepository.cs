@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NoteBook.Common.Interfaces.AccessData;
 using NoteBook.Common.Interfaces.DataAccess;
 using NoteBook.Entity.Enums;
 using NoteBook.Entity.Models;
 using System.Data;
 
-namespace NoteBook.AccessData
+namespace NoteBook.AccessData.Repositories
 {
     internal class AccountsRepository : IAccountsRepository
     {
@@ -16,10 +15,10 @@ namespace NoteBook.AccessData
             _appDbContext = appDbContext;
         }
 
-        public void Add (Account account)
+        public async Task AddAsync (Account account)
         {
 
-            _appDbContext.Accounts.Add(account);
+            await _appDbContext.Accounts.AddAsync(account);
         }
 
         public async Task<Account?> GetByNameAsync (string userLogin)
@@ -31,7 +30,7 @@ namespace NoteBook.AccessData
                 .SingleOrDefaultAsync(a => a.LoginName == userLogin);
         }
 
-        public async Task<Account?> GetByEmailAsync ( string userEmail)
+        public async Task<Account?> GetByEmailAsync (string userEmail)
         {
             return await
                 _appDbContext
@@ -55,9 +54,9 @@ namespace NoteBook.AccessData
                 .ToListAsync( );
         }
 
-        public  Task<int> CountRoleAsync (Role role)
+        public Task<int> CountRoleAsync (Role role)
         {
-            return  _appDbContext.Accounts.Where(a=> a.Role == role).CountAsync();
+            return _appDbContext.Accounts.Where(a => a.Role == role).CountAsync( );
         }
 
         public async Task<List<Account>?> GetByNameSubstringAsync (string name)
@@ -68,6 +67,11 @@ namespace NoteBook.AccessData
              .Include(e => e.Email)
              .Where(a => a.LoginName.Contains(name) || a.Email.Value.Contains(name))
              .ToListAsync( );
+        }
+
+        public void Update (Account account)
+        {
+            _appDbContext.Accounts.Update(account);
         }
     }
 }

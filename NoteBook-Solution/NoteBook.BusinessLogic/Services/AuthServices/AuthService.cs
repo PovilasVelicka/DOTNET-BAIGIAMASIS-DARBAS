@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using NoteBook.BusinessLogic.Services.DTOs;
 using NoteBook.Common.Interfaces.DataAccess;
 using NoteBook.Common.Interfaces.DTOs;
 using NoteBook.Common.Interfaces.Services;
@@ -13,40 +12,51 @@ namespace NoteBook.BusinessLogic.Services.AuthServices
     public class AuthService : IAuthService
     {
         private readonly IAccountsRepository _accountsRepository;
+        private readonly IJwtService _jwtService;
         private readonly ILogger<AuthService> _logger;
-        public AuthService (IAccountsRepository accountsRepository, ILogger<AuthService> logger)
+        public AuthService (IAccountsRepository accountsRepository, IJwtService jwtService, ILogger<AuthService> logger)
         {
             _accountsRepository = accountsRepository;
             _logger = logger;
+            _jwtService = jwtService;
         }
 
-        public async Task<IResponse<Account>> LoginAsync (string username, string password)
+        public async Task<ServiceResponseDto<string>> LoginAsync (string username, string password)
         {
             var account = await _accountsRepository.GetByNameAsync(username);
-            if (account == null) return new AuthResponseDto(null, "User name not exists", (int)HttpStatusCode.NotFound);
+
+            if (account == null)
+            {
+                return new ServiceResponseDto<string>(default, "User name not exists", 404);
+            }
+
             if (!password.VerifyPassword(account.PasswordHash, account.PasswordSalt))
             {
-                return new AuthResponseDto(null, "Incorrect password", (int)HttpStatusCode.Unauthorized);
+                return new ServiceResponseDto<string>(null, "Incorrect password", (int)HttpStatusCode.Unauthorized);
             }
-            return new AuthResponseDto(account, (int)HttpStatusCode.OK);
+
+            return new ServiceResponseDto<string>(_jwtService.GetJwtToken(account),"Login succesfull",(int)HttpStatusCode.OK);
         }
 
-        public async Task<IResponse<Account>> SignupNewAccountAsync (string loginName, string password, string email)
+        public async Task<ServiceResponseDto<string>> SignupNewAccountAsync (string loginName, string password, string email)
         {
             if (await _accountsRepository.GetByNameAsync(loginName) != null)
             {
-                return new AuthResponseDto(null, "User name already exists", (int)HttpStatusCode.BadRequest);
+                return new ServiceResponseDto<string>(null, "User name already exists", (int)HttpStatusCode.BadRequest);
             }
 
             if (await _accountsRepository.GetByEmailAsync(email) != null)
             {
-                return new AuthResponseDto(null, "User email already exists", (int)HttpStatusCode.BadRequest);
+                return new ServiceResponseDto<string>(null, "User email already exists", (int)HttpStatusCode.BadRequest);
             }
+
             var adminCount = await _accountsRepository.CountRoleAsync(Role.PeopleAdmin);
 
             var account = CreateAccount(loginName, password, email, adminCount == 0 ? Role.PeopleAdmin : Role.Guest);
 
-            _accountsRepository.Add(account);
+            await _accountsRepository.AddAsync(account);
+         
+
             try
             {
                 await _accountsRepository.SaveChangesAsync( );
@@ -59,10 +69,16 @@ namespace NoteBook.BusinessLogic.Services.AuthServices
                     $"\n\terror: {e.Message} {e.InnerException}";
                 _logger.LogError(message: errMessage);
 
-                return new AuthResponseDto(null, "Account creation error", 500);
+                return new ServiceResponseDto<string>(null, "Account creation error", 500);
             }
 
-            return new AuthResponseDto(account, (int)HttpStatusCode.OK);
+            _logger.Log(
+                LogLevel.Information,
+                $"New user created: " +
+                $"\n\tId: {account.Id}" +
+                $"\n\tName: {account.LoginName}");
+
+            return new ServiceResponseDto<string>(_jwtService.GetJwtToken(account),"",(int)HttpStatusCode.Created);
         }
 
         private static Account CreateAccount (string loginName, string password, string email, Role role)

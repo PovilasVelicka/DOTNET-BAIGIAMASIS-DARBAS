@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using NoteBook.BusinessLogic.Services.AuthServices;
+using NoteBook.BusinessLogic.Services.NotesService;
 using NoteBook.BusinessLogic.Services.PeopleAdmin;
 using NoteBook.Common.Interfaces.Services;
 using System.Text;
@@ -35,6 +36,7 @@ namespace NoteBook.BusinessLogic.Extensions
         public static IServiceCollection AddServices (this IServiceCollection services)
         {
             services.AddScoped<IPeopleAdminService, PeopleAdminService>( );
+            services.AddScoped<INotesService, NotesService>( );
             return services;
         }
     }

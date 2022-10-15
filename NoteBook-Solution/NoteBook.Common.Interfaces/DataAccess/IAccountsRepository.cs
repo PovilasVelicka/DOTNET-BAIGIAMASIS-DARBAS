@@ -5,7 +5,8 @@ namespace NoteBook.Common.Interfaces.DataAccess
 {
     public interface IAccountsRepository
     {
-        void Add(Account account);
+        Task AddAsync(Account account);
+        void Update(Account account);
         Task<Account?> GetByNameAsync(string userLogin);
         Task SaveChangesAsync();
         Task<Account?> GetByEmailAsync(string userEmail);

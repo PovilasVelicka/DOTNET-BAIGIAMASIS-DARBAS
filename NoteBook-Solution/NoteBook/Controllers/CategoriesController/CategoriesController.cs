@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using NoteBook.Controllers.Attributes;
 using NoteBook.Entity.Enums;
 
-namespace NoteBook.Controllers.Categories
+namespace NoteBook.Controllers.CategoriesController
 {
     [Authorize]
     [Route("notebook")]

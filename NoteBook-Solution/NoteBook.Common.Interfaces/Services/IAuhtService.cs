@@ -5,7 +5,10 @@ namespace NoteBook.Common.Interfaces.Services
 {
     public interface IAuthService
     {
-        Task<IResponse<Account>> SignupNewAccountAsync (string username, string password, string email);
-        Task<IResponse<Account>> LoginAsync (string username, string password);
+        /// <returns>If SignUp sucessfule return token else null </returns>
+        Task<ServiceResponseDto<string>> SignupNewAccountAsync (string username, string password, string email);
+
+        /// <returns>If Login sucessfule return token else null </returns>
+        Task<ServiceResponseDto<string>> LoginAsync (string username, string password);
     }
 }

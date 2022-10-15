@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace NoteBook.Controllers.Notes
+namespace NoteBook.Controllers.NotesController
 {
     [Route("notebook")]
     [ApiController]

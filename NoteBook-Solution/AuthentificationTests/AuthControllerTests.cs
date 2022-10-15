@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NoteBook.BusinessLogic.Services.DTOs;
+using NoteBook.Common.Interfaces.DTOs;
 using NoteBook.Common.Interfaces.Services;
-using NoteBook.Controllers.Authentification;
-using NoteBook.Controllers.Authentification.DTOs;
+using NoteBook.Controllers.AuthController;
+using NoteBook.Controllers.AuthController.DTOs;
 using NoteBook.Entity.Models;
 using System.Net;
 
@@ -14,17 +14,15 @@ namespace AuthentificationTests
     public class AuthControllerTests
     {
         private readonly Mock<IAuthService> _authServiceMock;
-        private readonly Mock<IJwtService> _jwtServiceMock;
         private readonly Mock<ILogger<AuthController>> _logger;
         private readonly AuthController _sut;
         public AuthControllerTests ( )
         {
             _authServiceMock = new Mock<IAuthService>( );
-            _jwtServiceMock = new Mock<IJwtService>( );
+
             _logger = new Mock<ILogger<AuthController>>( );
             _sut = new AuthController(
-                _authServiceMock.Object,
-                _jwtServiceMock.Object,
+                _authServiceMock.Object,            
                 _logger.Object);
         }
 
@@ -33,7 +31,7 @@ namespace AuthentificationTests
         {
             _authServiceMock
                 .Setup(a => a.SignupNewAccountAsync(It.IsAny<string>( ), It.IsAny<string>( ), It.IsAny<string>( )))
-                .ReturnsAsync(new AuthResponseDto(null, "User name or email exists", 400));
+                .ReturnsAsync(new ServiceResponseDto<string>(null, "User name or email exists", 400));
 
             var response = await _sut.SignUp(signupDto);
             var responseObject = response as ObjectResult;
@@ -41,11 +39,11 @@ namespace AuthentificationTests
         }
 
         [Theory, AutoData]
-        public async Task SignUp_WhenUserNotExists_ResponseOk (SignupDto signupDto)
+        public async Task SignUp_WhenUserNotExists_CreateNewResponseOk (SignupDto signupDto)
         {
             _authServiceMock
                 .Setup(a => a.SignupNewAccountAsync(signupDto.UserName, signupDto.Password, signupDto.Email))
-                .ReturnsAsync(new AuthResponseDto(new Account( ), "UserCreated", 200));
+                .ReturnsAsync(new ServiceResponseDto<string>(true,"User created"));
 
             var response = await _sut.SignUp(signupDto);
             var responseObject = response as ObjectResult;

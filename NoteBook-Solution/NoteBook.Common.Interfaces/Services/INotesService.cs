@@ -1,12 +1,14 @@
-﻿using NoteBook.Entity.Models;
+﻿using NoteBook.Common.Interfaces.DTOs;
+using NoteBook.Entity.Models;
 
 namespace NoteBook.Common.Interfaces.Services
 {
     public interface INotesService
     {
-        //List<Note> GetBy (string userId, int categoryId)
-        //{
-        //    List<Note> list = new List<Note>( );
-        //}
+        Task<ServiceResponseDto<List<Note>>> GetAllAsync (Guid userId);
+        Task<ServiceResponseDto<List<Note>>> GetRemindersAsync (Guid userId);
+        Task<ServiceResponseDto<Note>> CreateAsync (Note note);
+        Task<ServiceResponseDto<Note>> UpdateAsync (Note note);
+        Task<ServiceResponseDto<Note>> DeleteAsync (Guid userId, int noteId);
     }
 }

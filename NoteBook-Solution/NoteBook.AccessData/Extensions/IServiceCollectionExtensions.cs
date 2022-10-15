@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NoteBook.AccessData.Repositories;
 using NoteBook.Common.Interfaces.DataAccess;
 using NoteBook.Entity.Models;
 
@@ -15,6 +16,7 @@ namespace NoteBook.AccessData.Extensions
 
 
             services.AddScoped<IAccountsRepository, AccountsRepository>( );
+            services.AddScoped<INotesRepository, NotesRepository>( );
             return services;
         }
     }

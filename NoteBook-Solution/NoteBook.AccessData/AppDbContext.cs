@@ -1,10 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NoteBook.Common.Interfaces.AccessData;
 using NoteBook.Entity.Enums;
 
 namespace NoteBook.Entity.Models
 {
-    internal partial class AppDbContext : DbContext, IDbContext
+    internal partial class AppDbContext : DbContext
     {
         public AppDbContext ( ) { }
 

@@ -27,7 +27,7 @@ namespace NoteBook.BusinessLogic.Services.AuthServices
 
             if (account == null)
             {
-                return new ServiceResponseDto<string>(default, "User name not exists", 404);
+                return new ServiceResponseDto<string>(default, "User name not exists", (int)HttpStatusCode.NotFound);
             }
 
             if (!password.VerifyPassword(account.PasswordHash, account.PasswordSalt))
@@ -35,19 +35,24 @@ namespace NoteBook.BusinessLogic.Services.AuthServices
                 return new ServiceResponseDto<string>(null, "Incorrect password", (int)HttpStatusCode.Unauthorized);
             }
 
-            return new ServiceResponseDto<string>(_jwtService.GetJwtToken(account),"Login succesfull",(int)HttpStatusCode.OK);
+            if (account.Disabled)
+            {
+                return new ServiceResponseDto<string>(null, "User disabled, please contact administrator", (int)HttpStatusCode.Forbidden);
+            }
+
+            return new ServiceResponseDto<string>(_jwtService.GetJwtToken(account), "Login succesfull", (int)HttpStatusCode.OK);
         }
 
         public async Task<ServiceResponseDto<string>> SignupNewAccountAsync (string loginName, string password, string email)
         {
             if (await _accountsRepository.GetByNameAsync(loginName) != null)
             {
-                return new ServiceResponseDto<string>(null, "User name already exists", (int)HttpStatusCode.BadRequest);
+                return new ServiceResponseDto<string>(null, "User name already exists", (int)HttpStatusCode.Conflict);
             }
 
             if (await _accountsRepository.GetByEmailAsync(email) != null)
             {
-                return new ServiceResponseDto<string>(null, "User email already exists", (int)HttpStatusCode.BadRequest);
+                return new ServiceResponseDto<string>(null, "Eail already exists", (int)HttpStatusCode.Conflict);
             }
 
             var adminCount = await _accountsRepository.CountRoleAsync(Role.PeopleAdmin);
@@ -55,7 +60,6 @@ namespace NoteBook.BusinessLogic.Services.AuthServices
             var account = CreateAccount(loginName, password, email, adminCount == 0 ? Role.PeopleAdmin : Role.Guest);
 
             await _accountsRepository.AddAsync(account);
-         
 
             try
             {
@@ -69,7 +73,10 @@ namespace NoteBook.BusinessLogic.Services.AuthServices
                     $"\n\terror: {e.Message} {e.InnerException}";
                 _logger.LogError(message: errMessage);
 
-                return new ServiceResponseDto<string>(null, "Account creation error", 500);
+                return new ServiceResponseDto<string>(
+                    null, 
+                    e.InnerException?.Message ?? "Unexpected error", 
+                    (int)HttpStatusCode.ServiceUnavailable);
             }
 
             _logger.Log(
@@ -78,7 +85,7 @@ namespace NoteBook.BusinessLogic.Services.AuthServices
                 $"\n\tId: {account.Id}" +
                 $"\n\tName: {account.LoginName}");
 
-            return new ServiceResponseDto<string>(_jwtService.GetJwtToken(account),"",(int)HttpStatusCode.Created);
+            return new ServiceResponseDto<string>(_jwtService.GetJwtToken(account), "", (int)HttpStatusCode.Created);
         }
 
         private static Account CreateAccount (string loginName, string password, string email, Role role)
@@ -94,7 +101,6 @@ namespace NoteBook.BusinessLogic.Services.AuthServices
                 PasswordSalt = passwordSalt,
                 Role = role,
                 Disabled = false,
-              
             };
         }
     }

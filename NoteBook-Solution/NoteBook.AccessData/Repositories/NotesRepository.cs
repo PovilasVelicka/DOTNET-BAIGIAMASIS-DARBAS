@@ -1,64 +1,91 @@
-﻿using NoteBook.Common.Interfaces.DataAccess;
+﻿using Microsoft.EntityFrameworkCore;
+using NoteBook.Common.Interfaces.DataAccess;
 using NoteBook.Entity.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NoteBook.AccessData.Repositories
 {
     internal class NotesRepository : INotesRepository
     {
         private readonly AppDbContext _context;
-        public NotesRepository(AppDbContext context)
+        public NotesRepository (AppDbContext context)
         {
             _context = context;
         }
 
-        public Task AddAsync(Note note)
+        public void AddAsync (Note note)
         {
-            throw new NotImplementedException();
+            _context.Notes.Add(note);
+        }
+        public void Update (Note note)
+        {
+            _context.Notes.Update(note);
         }
 
-        public Task DeleteAsync(Note note)
+        public void Delete (Guid userId, int id)
         {
-            throw new NotImplementedException();
+            var note = GetNotesIncluded(userId)
+                .Single(n => n.Id.Equals(id));
+            note.Deleted = true;
+            Update(note);
         }
 
-        public Task<IQueryable<Note>> FindNotesAsync(Guid userId, string substirng)
+        public Task<List<Note>> FindNotesAsync (Guid userId, string substirng, bool complete)
         {
-            throw new NotImplementedException();
+            return GetNotesIncluded(userId)
+                .Where(n =>
+                    n.Complete == complete
+                    && n.NoteText.Contains(substirng, StringComparison.InvariantCultureIgnoreCase))
+                .ToListAsync( );
         }
 
-        public Task<IQueryable<Note>> GetByCategoryAsync(Guid userId, int categoryId)
+        public Task<List<Note>> GetByCategoryAsync (Guid userId, string categoryName, bool complete)
         {
-            throw new NotImplementedException();
+            return GetNotesIncluded(userId)
+                .Where(n =>
+                    n.Category.Equals(categoryName)
+                    && n.Complete == complete)
+                .ToListAsync( );
         }
 
-        public Task<Note> GetByIdAsync(Guid userId, int id)
+        public Task<Note> GetByIdAsync (Guid userId, int id)
         {
-            throw new NotImplementedException();
+            return GetNotesIncluded(userId).SingleAsync(n => n.Id == id);
         }
 
-        public Task<IQueryable<Note>> GetByPriorityAsync(Guid userId, int categoryId)
+        public Task<List<Note>> GetByPriorityAsync (Guid userId, string priority, bool complete)
         {
-            throw new NotImplementedException();
+            return GetNotesIncluded(userId)
+                .Where(n =>
+                    n.Priority.Equals(priority)
+                    && n.Complete == complete)
+                .ToListAsync( );
         }
 
-        public Task<IQueryable<Note>> GetRemindersAsync(Guid userId)
+        public Task<List<Note>> GetRemindersAsync (Guid userId, bool complete)
         {
-            throw new NotImplementedException();
+            return GetNotesIncluded(userId)
+                .Where(n =>
+                    n.UseReminder
+                    && n.Complete == complete)
+                .ToListAsync( );
         }
 
-        public Task SaveChangesAsync()
+        public async Task SaveChangesAsync ( )
         {
-            throw new NotImplementedException();
+            await _context.SaveChangesAsync( );
         }
 
-        public Task UpdateAsync(Note note)
+
+
+        private IQueryable<Note> GetNotesIncluded (Guid userId)
         {
-            throw new NotImplementedException();
+            return _context
+                .Notes
+                .Include(c => c.Category)
+                .Include(u => u.User)
+                .Where(n =>
+                    !n.Deleted
+                    && n.UserId == userId);
         }
     }
 }

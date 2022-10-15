@@ -24,18 +24,14 @@ namespace NoteBook.AccessData.Repositories
         public async Task<Account?> GetByNameAsync (string userLogin)
         {
             return await
-                _appDbContext
-                .Accounts
-                .Include(e => e.Email)
+                GetAccountsIncludeEmails( )
                 .SingleOrDefaultAsync(a => a.LoginName == userLogin);
         }
 
         public async Task<Account?> GetByEmailAsync (string userEmail)
         {
             return await
-                _appDbContext
-                .Accounts
-                .Include(e => e.Email)
+                GetAccountsIncludeEmails( )
                 .SingleOrDefaultAsync(a => a.Email.Value == userEmail);
         }
 
@@ -47,24 +43,20 @@ namespace NoteBook.AccessData.Repositories
         public async Task<List<Account>?> GetByRoleAsync (Role role)
         {
             return await
-                _appDbContext
-                .Accounts
-                .Include(e => e.Email)
+                GetAccountsIncludeEmails( )
                 .Where(a => a.Role == role)
                 .ToListAsync( );
         }
 
-        public Task<int> CountRoleAsync (Role role)
+        public async Task<int> CountRoleAsync (Role role)
         {
-            return _appDbContext.Accounts.Where(a => a.Role == role).CountAsync( );
+            return await _appDbContext.Accounts.Where(a => a.Role == role).CountAsync( );
         }
 
         public async Task<List<Account>?> GetByNameSubstringAsync (string name)
         {
             return await
-             _appDbContext
-             .Accounts
-             .Include(e => e.Email)
+             GetAccountsIncludeEmails( )
              .Where(a => a.LoginName.Contains(name) || a.Email.Value.Contains(name))
              .ToListAsync( );
         }
@@ -76,9 +68,12 @@ namespace NoteBook.AccessData.Repositories
 
         public Account GetById (Guid Id)
         {
-            return _appDbContext.Accounts.Include(e => e.Email).Single(a => a.Id == Id);
+            return GetAccountsIncludeEmails( ).Single(a => a.Id == Id);
         }
 
-     
+        private IQueryable<Account> GetAccountsIncludeEmails ( )
+        {
+            return _appDbContext.Accounts.Include(e => e.Email);
+        }
     }
 }

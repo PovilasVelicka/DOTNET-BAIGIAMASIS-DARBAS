@@ -6,7 +6,7 @@ using NoteBook.Entity.Enums;
 namespace NoteBook.Controllers.CategoriesController
 {
     [Authorize]
-    [Route("notebook")]
+    [Route("notebook/categories")]
     [ApiController]
     [AuthorizeRoles(Role.StandartUser, Role.PeopleAdmin)]
     public class CategoriesController : ControllerBase

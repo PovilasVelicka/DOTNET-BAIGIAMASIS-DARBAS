@@ -2,7 +2,7 @@
 
 namespace NoteBook.Controllers.NotesController
 {
-    [Route("notebook")]
+    [Route("notebook/notes")]
     [ApiController]
     public class NotesController : ControllerBase
     {

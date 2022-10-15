@@ -12,8 +12,8 @@ using NoteBook.Entity.Models;
 namespace NoteBook.AccessData.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221006070418_role-type-as-string")]
-    partial class roletypeasstring
+    [Migration("20221015160451_userRelation")]
+    partial class userRelation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,33 +24,19 @@ namespace NoteBook.AccessData.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("NoteBook.Entity.Models.AboutUser", b =>
+            modelBuilder.Entity("CategoryUser", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("CategoriesId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UsersId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("uniqueidentifier");
+                    b.HasKey("CategoriesId", "UsersId");
 
-                    b.Property<int>("FirstNameId")
-                        .HasColumnType("int");
+                    b.HasIndex("UsersId");
 
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LastNameId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex(new[] { "AccountId" }, "IX_AboutUsers_AccountId");
-
-                    b.HasIndex(new[] { "FirstNameId" }, "IX_AboutUsers_FirstNameId");
-
-                    b.HasIndex(new[] { "LastNameId" }, "IX_AboutUsers_LastNameId");
-
-                    b.ToTable("AboutUsers", "notebook");
+                    b.ToTable("CategoryUser", "notebook");
                 });
 
             modelBuilder.Entity("NoteBook.Entity.Models.Account", b =>
@@ -63,9 +49,6 @@ namespace NoteBook.AccessData.Migrations
 
                     b.Property<int>("EmailId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("EmailVerified")
-                        .HasColumnType("bit");
 
                     b.Property<string>("LoginName")
                         .IsRequired()
@@ -85,9 +68,20 @@ namespace NoteBook.AccessData.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<Guid?>("UserId")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "EmailId" }, "IX_Accounts_EmailId");
+                    b.HasIndex("EmailId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.HasIndex(new[] { "EmailId" }, "IX_Accounts_EmailId")
+                        .HasDatabaseName("IX_Accounts_EmailId1");
 
                     b.HasIndex(new[] { "LoginName" }, "UI_LoginName")
                         .IsUnique();
@@ -97,9 +91,6 @@ namespace NoteBook.AccessData.Migrations
 
             modelBuilder.Entity("NoteBook.Entity.Models.Category", b =>
                 {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
@@ -111,10 +102,7 @@ namespace NoteBook.AccessData.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<bool>("Deleted")
-                        .HasColumnType("bit");
-
-                    b.HasKey("UserId", "Id");
+                    b.HasKey("Id");
 
                     b.ToTable("Categories", "notebook");
                 });
@@ -132,6 +120,9 @@ namespace NoteBook.AccessData.Migrations
                         .HasMaxLength(120)
                         .IsUnicode(false)
                         .HasColumnType("varchar(120)");
+
+                    b.Property<bool>("EmailVerified")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LocalPart")
                         .IsRequired()
@@ -203,9 +194,6 @@ namespace NoteBook.AccessData.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -223,9 +211,6 @@ namespace NoteBook.AccessData.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("DoPriority")
-                        .HasColumnType("int");
-
                     b.Property<string>("Fill")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -240,6 +225,11 @@ namespace NoteBook.AccessData.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasDefaultValueSql("(N'')");
 
+                    b.Property<string>("Priority")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<DateTimeOffset?>("Reminder")
                         .HasColumnType("datetimeoffset");
 
@@ -251,77 +241,114 @@ namespace NoteBook.AccessData.Migrations
                     b.Property<bool>("UseReminder")
                         .HasColumnType("bit");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex(new[] { "Id" }, "IX_Notes");
+                    b.HasIndex("CategoryId");
 
-                    b.HasIndex(new[] { "AccountId", "CategoryId" }, "IX_Notes_UserId_CategoryId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Notes", "notebook");
                 });
 
-            modelBuilder.Entity("NoteBook.Entity.Models.AboutUser", b =>
+            modelBuilder.Entity("NoteBook.Entity.Models.User", b =>
                 {
-                    b.HasOne("NoteBook.Entity.Models.Account", "Account")
-                        .WithMany("AboutUsers")
-                        .HasForeignKey("AccountId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("FirstNameId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("LastNameId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex(new[] { "FirstNameId" }, "IX_Users_FirstNameId");
+
+                    b.HasIndex(new[] { "LastNameId" }, "IX_Users_LastNameId");
+
+                    b.ToTable("Users", "notebook");
+                });
+
+            modelBuilder.Entity("CategoryUser", b =>
+                {
+                    b.HasOne("NoteBook.Entity.Models.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NoteBook.Entity.Models.FirstName", "FirstName")
-                        .WithMany("AboutUsers")
-                        .HasForeignKey("FirstNameId")
+                    b.HasOne("NoteBook.Entity.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("NoteBook.Entity.Models.LastName", "LastName")
-                        .WithMany("AboutUsers")
-                        .HasForeignKey("LastNameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-
-                    b.Navigation("FirstName");
-
-                    b.Navigation("LastName");
                 });
 
             modelBuilder.Entity("NoteBook.Entity.Models.Account", b =>
                 {
                     b.HasOne("NoteBook.Entity.Models.Email", "Email")
-                        .WithMany("Accounts")
-                        .HasForeignKey("EmailId")
+                        .WithOne("Accounts")
+                        .HasForeignKey("NoteBook.Entity.Models.Account", "EmailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NoteBook.Entity.Models.User", "User")
+                        .WithOne("Account")
+                        .HasForeignKey("NoteBook.Entity.Models.Account", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Email");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("NoteBook.Entity.Models.Note", b =>
                 {
-                    b.HasOne("NoteBook.Entity.Models.Account", "Account")
+                    b.HasOne("NoteBook.Entity.Models.Category", "Category")
                         .WithMany("Notes")
-                        .HasForeignKey("AccountId")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NoteBook.Entity.Models.Category", "Category")
+                    b.HasOne("NoteBook.Entity.Models.User", "User")
                         .WithMany("Notes")
-                        .HasForeignKey("AccountId", "CategoryId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Notes_Categories");
-
-                    b.Navigation("Account");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
+
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("NoteBook.Entity.Models.Account", b =>
+            modelBuilder.Entity("NoteBook.Entity.Models.User", b =>
                 {
-                    b.Navigation("AboutUsers");
+                    b.HasOne("NoteBook.Entity.Models.FirstName", "FirstName")
+                        .WithMany("Users")
+                        .HasForeignKey("FirstNameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Notes");
+                    b.HasOne("NoteBook.Entity.Models.LastName", "LastName")
+                        .WithMany("Users")
+                        .HasForeignKey("LastNameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FirstName");
+
+                    b.Navigation("LastName");
                 });
 
             modelBuilder.Entity("NoteBook.Entity.Models.Category", b =>
@@ -331,17 +358,26 @@ namespace NoteBook.AccessData.Migrations
 
             modelBuilder.Entity("NoteBook.Entity.Models.Email", b =>
                 {
-                    b.Navigation("Accounts");
+                    b.Navigation("Accounts")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("NoteBook.Entity.Models.FirstName", b =>
                 {
-                    b.Navigation("AboutUsers");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("NoteBook.Entity.Models.LastName", b =>
                 {
-                    b.Navigation("AboutUsers");
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("NoteBook.Entity.Models.User", b =>
+                {
+                    b.Navigation("Account")
+                        .IsRequired();
+
+                    b.Navigation("Notes");
                 });
 #pragma warning restore 612, 618
         }

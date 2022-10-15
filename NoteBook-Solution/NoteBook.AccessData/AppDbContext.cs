@@ -9,7 +9,7 @@ namespace NoteBook.Entity.Models
 
         public AppDbContext (DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public virtual DbSet<AboutUser> AboutUsers { get; set; } = null!;
+        public virtual DbSet<User> AboutUsers { get; set; } = null!;
         public virtual DbSet<Account> Accounts { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<Email> Emails { get; set; } = null!;
@@ -27,17 +27,26 @@ namespace NoteBook.Entity.Models
             modelBuilder.Entity<Account>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever( );
-                // convert enum to string and back to enum (upload, download)
+
                 entity.Property(p => p.Role)
-                .HasConversion(
-                    u => u.ToString( ),
-                    d => (Role)Enum.Parse(typeof(Role), d));
+                    .HasConversion(
+                        u => u.ToString( ),
+                        d => (Role)Enum.Parse(typeof(Role), d));
+
+                entity.Property(p => p.UserId).IsRequired(false);
             });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.Property(e => e.Gender)
+                    .HasConversion(
+                        u => u.ToString( ),
+                        d => (Gender)Enum.Parse(typeof(Gender), d));
+            });
+
 
             modelBuilder.Entity<Category>(entity =>
             {
-                entity.HasKey(e => new { e.UserId, e.Id });
-
                 entity.Property(e => e.Id).ValueGeneratedOnAdd( );
             });
 
@@ -49,11 +58,10 @@ namespace NoteBook.Entity.Models
 
                 entity.Property(e => e.NoteText).HasDefaultValueSql("(N'')");
 
-                entity.HasOne(d => d.Category)
-                    .WithMany(p => p.Notes)
-                    .HasForeignKey(d => new { d.AccountId, d.CategoryId })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Notes_Categories");
+                entity.Property(p => p.Priority)
+               .HasConversion(
+                   u => u.ToString( ),
+                   d => (Priority)Enum.Parse(typeof(Priority), d));
             });
 
             OnModelCreatingPartial(modelBuilder);

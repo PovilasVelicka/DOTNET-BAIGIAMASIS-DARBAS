@@ -37,5 +37,11 @@ namespace NoteBook.BusinessLogic.Services.PeopleAdmin
             var users = await _repository.GetByNameSubstringAsync(nameSubstring);
             return new ServiceResponseDto<List<Account>>(users);
         }
+
+        public ServiceResponseDto<Account> GetById (Guid Id)
+        {
+            var user = _repository.GetById(Id);
+            return new ServiceResponseDto<Account>(user);
+        }
     }
 }

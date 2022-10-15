@@ -9,10 +9,6 @@ namespace NoteBook.Entity.Models
     [Index("Value", Name = "UI_Emails", IsUnique = true)]
     public class Email
     {
-        public Email ( )
-        {
-            Accounts = new HashSet<Account>( );
-        }
 
         [Key]
         public int Id { get; set; }
@@ -25,20 +21,19 @@ namespace NoteBook.Entity.Models
         [StringLength(256)]
         [Unicode(false)]
         public string Value { get; set; } = null!;
+        public bool EmailVerified { get; set; }
 
         [InverseProperty("Email")]
-        public virtual ICollection<Account> Accounts { get; set; }
-
-
-
+        public virtual Account Accounts { get; set; } = null!;
+        public Email ( ) { }
         public Email (string email)
         {
-            Accounts = new HashSet<Account>( );
             if (email.IsValidEmail(localPart: out string lp, domain: out string dm))
             {
                 LocalPart = lp;
                 Domain = dm;
                 Value = email.ToLower( );
+                EmailVerified=false;
             }
         }
     }

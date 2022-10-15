@@ -9,5 +9,6 @@ namespace NoteBook.Common.Interfaces.Services
         Task<ServiceResponseDto<Account>> ChangeUserRoleAsync (string loginName, Role role);
         Task<ServiceResponseDto<List<Account>>> FindUsersAsync (Role roles);
         Task<ServiceResponseDto<List<Account>>> FindUsersAsync (string nameSubstring);
+        ServiceResponseDto<Account> GetById (Guid Id);
     }
 }

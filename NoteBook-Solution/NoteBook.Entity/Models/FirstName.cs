@@ -11,7 +11,7 @@ namespace NoteBook.Entity.Models
     {
         public FirstName ( )
         {
-            AboutUsers = new HashSet<AboutUser>( );
+            Users = new HashSet<User>( );
         }
 
         [Key]
@@ -20,11 +20,11 @@ namespace NoteBook.Entity.Models
         public string Value { get; set; } = null!;
 
         [InverseProperty("FirstName")]
-        public virtual ICollection<AboutUser> AboutUsers { get; set; }
+        public virtual ICollection<User> Users { get; set; }
 
         public FirstName (string firstname)
         {
-            AboutUsers = new HashSet<AboutUser>( );
+            Users = new HashSet<User>( );
             Value = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(firstname.ToLower( ));
         }
     }

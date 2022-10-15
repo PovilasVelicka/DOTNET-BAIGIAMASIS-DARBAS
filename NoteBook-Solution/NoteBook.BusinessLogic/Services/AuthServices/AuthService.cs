@@ -94,7 +94,7 @@ namespace NoteBook.BusinessLogic.Services.AuthServices
                 PasswordSalt = passwordSalt,
                 Role = role,
                 Disabled = false,
-                EmailVerified = false,
+              
             };
         }
     }

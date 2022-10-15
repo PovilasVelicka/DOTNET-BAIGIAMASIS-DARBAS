@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NoteBook.Entity.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NoteBook.Entity.Models
 {
     [Table("Notes", Schema = "notebook")]
-    [Index("Id", Name = "IX_Notes")]
-    [Index("AccountId", "CategoryId", Name = "IX_Notes_UserId_CategoryId")]
+
     public partial class Note
     {
         [Key]
@@ -22,17 +22,25 @@ namespace NoteBook.Entity.Models
         [StringLength(9)]
         [Unicode(false)]
         public string Color { get; set; } = null!;
+        [StringLength(50)]
+        public Priority Priority { get; set; }
         public bool Complete { get; set; }
         public bool Deleted { get; set; }
-        public int DoPriority { get; set; }
-        public int CategoryId { get; set; }
-        public Guid AccountId { get; set; }
 
-        [ForeignKey("AccountId,CategoryId")]
+    
+        public int CategoryId { get; set; }
+        public Guid UserId { get; set; }
+
+
+        [ForeignKey("UserId")]
+        [InverseProperty("Notes")]
+        public virtual User User { get; set; } = null!;
+
+
+        [ForeignKey("CategoryId")]
         [InverseProperty("Notes")]
         public virtual Category Category { get; set; } = null!;
-        [ForeignKey("AccountId")]
-        [InverseProperty("Notes")]
-        public virtual Account Account { get; set; } = null!;
+
+
     }
 }

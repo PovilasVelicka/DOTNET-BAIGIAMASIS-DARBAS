@@ -73,5 +73,12 @@ namespace NoteBook.AccessData.Repositories
         {
             _appDbContext.Accounts.Update(account);
         }
+
+        public Account GetById (Guid Id)
+        {
+            return _appDbContext.Accounts.Include(e => e.Email).Single(a => a.Id == Id);
+        }
+
+     
     }
 }

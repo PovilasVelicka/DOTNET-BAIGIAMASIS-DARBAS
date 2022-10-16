@@ -11,8 +11,16 @@ namespace NoteBook.Common.Interfaces.Services
         Task<ServiceResponseDto<List<Note>>> GetRemindersAsync (Guid userId, bool complete);
         Task<ServiceResponseDto<List<Note>>> GetRemindersAsync (Guid userId, bool complete, string category);
 
-        Task<ServiceResponseDto<Note>> CreateAsync (Guid userId, Note note);
-        Task<ServiceResponseDto<Note>> UpdateAsync (Guid userId, Note note);
-        Task<ServiceResponseDto<Note>> DeleteAsync (Guid userId, int noteId);
+
+        Task<ServiceResponseDto<Note>> CreateNoteAsync (Guid userId, Note note);
+        Task<ServiceResponseDto<Note>> UpdateNoteAsync (Guid userId, Note note);
+        Task<ServiceResponseDto<Note>> DeleteNoteAsync (Guid userId, int noteId);
+
+
+        Task<ServiceResponseDto<List<Category>>> GetCategoriesAsync (Guid userId);
+   
+        Task<ServiceResponseDto<Category>> CreateCategoryAsync (Guid userId, Category category);
+        Task<ServiceResponseDto<Category>> UpdateCategoryAsync (Guid userId, Category category);
+        Task<ServiceResponseDto<Category>> DeleteCategoryAsync (Guid userId, int categoryId);
     }
 }

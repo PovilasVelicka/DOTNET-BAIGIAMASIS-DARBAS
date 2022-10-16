@@ -17,7 +17,8 @@ namespace NoteBook.Entity.Models
         public int Id { get; set; }     
 
         [StringLength(50)]
-        public string CategoryName { get; set; } = null!;     
+        public string CategoryName { get; set; } = null!;
+        public bool Deleted { get; set; }
 
         [InverseProperty("Category")]
         public virtual ICollection<Note> Notes { get; set; }

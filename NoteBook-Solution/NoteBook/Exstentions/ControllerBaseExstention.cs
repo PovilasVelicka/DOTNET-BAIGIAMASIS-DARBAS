@@ -19,9 +19,9 @@ namespace NoteBook.Exstentions
             return objectResult;
         }
 
-        public static Guid GetUserGuid (this ClaimsPrincipal user)
+        public static Guid GetUserGuid (this ControllerBase controller)
         {
-            var userIdClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            var userIdClaim = controller.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
             if (userIdClaim == null) { return Guid.Empty; }
 
             Guid.TryParse(userIdClaim.Value, out Guid UserId);

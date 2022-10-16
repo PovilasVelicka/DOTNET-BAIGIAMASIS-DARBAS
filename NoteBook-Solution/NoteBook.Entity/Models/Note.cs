@@ -28,7 +28,7 @@ namespace NoteBook.Entity.Models
         public bool Deleted { get; set; }
 
     
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
         public Guid UserId { get; set; }
 
 

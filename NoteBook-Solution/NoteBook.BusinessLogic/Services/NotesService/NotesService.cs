@@ -78,7 +78,6 @@ namespace NoteBook.BusinessLogic.Services.NotesService
             return new ServiceResponseDto<List<Note>>(notes);
         }
 
-
         public async Task<ServiceResponseDto<List<Note>>> GetNotesAsync (Guid userId, bool complete, string category)
         {
             var notes = await _repository.GetByCategoryAsync(userId, complete,category);

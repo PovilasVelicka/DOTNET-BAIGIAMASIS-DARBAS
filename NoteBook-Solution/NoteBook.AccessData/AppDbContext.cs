@@ -48,6 +48,8 @@ namespace NoteBook.Entity.Models
             modelBuilder.Entity<Category>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedOnAdd( );
+
+               
             });
 
             modelBuilder.Entity<Note>(entity =>
@@ -57,6 +59,8 @@ namespace NoteBook.Entity.Models
                 entity.Property(e => e.Fill).HasDefaultValueSql("('#FFFFFFFF')");
 
                 entity.Property(e => e.NoteText).HasDefaultValueSql("(N'')");
+
+                entity.Property(e => e.CategoryId).IsRequired(false);
 
                 entity.Property(p => p.Priority)
                .HasConversion(

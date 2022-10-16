@@ -9,7 +9,7 @@ namespace NoteBook.Entity.Models
 
         public AppDbContext (DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public virtual DbSet<User> AboutUsers { get; set; } = null!;
+        public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<Account> Accounts { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<Email> Emails { get; set; } = null!;

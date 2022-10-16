@@ -2,6 +2,7 @@
 using NoteBook.Common.Interfaces.DTOs;
 using NoteBook.Common.Interfaces.Services;
 using NoteBook.Entity.Models;
+using System.Net;
 
 namespace NoteBook.BusinessLogic.Services.NotesService
 {
@@ -40,7 +41,7 @@ namespace NoteBook.BusinessLogic.Services.NotesService
             catch (Exception e)
             {
 
-                return new ServiceResponseDto<Note>(default, e.InnerException?.Message ?? ERROR, 503);
+                return new ServiceResponseDto<Note>(default, e.Message, 503);
             }
         }
 
@@ -55,7 +56,7 @@ namespace NoteBook.BusinessLogic.Services.NotesService
             catch (Exception e)
             {
 
-                return new ServiceResponseDto<Note>(default, e.InnerException?.Message ?? ERROR, 503);
+                return new ServiceResponseDto<Note>(default, e.Message, 503);
             }
         }
 
@@ -63,7 +64,6 @@ namespace NoteBook.BusinessLogic.Services.NotesService
         {
             var getComplete = await _repository.GetAllAsync(userId, true);
             var getNotComplete = await _repository.GetAllAsync(userId, false);
-
 
             var notes = new List<Note>( );
             notes.AddRange(getComplete);
@@ -108,12 +108,14 @@ namespace NoteBook.BusinessLogic.Services.NotesService
             {
                 var existsCategory = await _repository.GetCategoryAsync(userId, category.CategoryName);
                 if (existsCategory != null) return new ServiceResponseDto<Category>(existsCategory);
-                return await UpdateCategoryAsync(userId, category);
+                await _repository.CreateCategoryAsync(userId, category);
+                return new ServiceResponseDto<Category>(category);
+
             }
             catch (Exception e)
             {
 
-                return new ServiceResponseDto<Category>(default, e.InnerException?.Message ?? ERROR, 503);
+                return new ServiceResponseDto<Category>(default, e.Message, 503);
             }
         }
 
@@ -121,14 +123,18 @@ namespace NoteBook.BusinessLogic.Services.NotesService
         {
             try
             {
-                _repository.UpdateCategory(category);
+                var existCategory = await _repository.GetCategoryAsync(userId, category.Id);
+                if (existCategory == null) return new ServiceResponseDto<Category>(default, "Category not exists", (int)HttpStatusCode.NotFound);
+                existCategory.CategoryName = category.CategoryName;
+
+                _repository.UpdateCategory(existCategory);
                 await _repository.SaveChangesAsync( );
-                return new ServiceResponseDto<Category>(category);
+                return new ServiceResponseDto<Category>(existCategory);
             }
             catch (Exception e)
             {
 
-                return new ServiceResponseDto<Category>(default, e.InnerException?.Message ?? ERROR, 503);
+                return new ServiceResponseDto<Category>(default, e.Message, 503);
             }
         }
 
@@ -145,7 +151,7 @@ namespace NoteBook.BusinessLogic.Services.NotesService
             catch (Exception e)
             {
 
-                return new ServiceResponseDto<Category>(default, e.InnerException?.Message ?? ERROR, 503);
+                return new ServiceResponseDto<Category>(default, e.Message, 503);
             }
 
         }

@@ -2,15 +2,16 @@
 
 namespace NoteBook.Controllers.CategoriesController.DTOs
 {
-    public class CategoryDto
+    public class CategoryDto : CreateCategoryDto
     {
         public int Id { get; set; }
-        public string CategoryName { get; set; } = null!;
+
 
         public CategoryDto ( ) { }
 
-        public CategoryDto (Category category )
+        public CategoryDto (Category? category)
         {
+            if (category == null) return;
             Id = category.Id;
             CategoryName = category.CategoryName;
         }

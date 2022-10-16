@@ -21,7 +21,7 @@ namespace NoteBook.Common.Interfaces.DataAccess
         void DeleteNote (Guid userId, int Id);
         void UpdateNote (Note note);
 
-        void AddCategory (Category category);
+        Task CreateCategoryAsync (Guid userId, Category category);
         void DeleteCategory (Guid userId, int Id);
         void UpdateCategory (Category category);
         Task SaveChangesAsync ( );

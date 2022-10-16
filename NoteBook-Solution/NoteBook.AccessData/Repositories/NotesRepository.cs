@@ -89,15 +89,21 @@ namespace NoteBook.AccessData.Repositories
             return GetAllCategories(userId).SingleAsync(c => c.Id == categoryId);
         }
 
-        public void AddCategory (Category category)
+        public async Task CreateCategoryAsync (Guid userGuid, Category category)
         {
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == userGuid);
+            if (user == null) return;
             _context.Categories.Add(category);
+            user.Categories.Add(category);
+
+
+            await _context.SaveChangesAsync( );
         }
 
         public void DeleteCategory (Guid userId, int id)
         {
             var category = GetAllCategories(userId)
-               .Single(n => n.Id==id);
+               .Single(n => n.Id == id);
 
             category.Deleted = true;
             UpdateCategory(category);
@@ -143,6 +149,6 @@ namespace NoteBook.AccessData.Repositories
                     && n.Users.Any(u => u.Id == userId));
         }
 
-       
+
     }
 }

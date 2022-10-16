@@ -12,10 +12,11 @@ namespace NoteBook.AccessData.Repositories
             _context = context;
         }
 
-        public void AddAsync (Note note)
+        public void Add (Note note)
         {
             _context.Notes.Add(note);
         }
+
         public void Update (Note note)
         {
             _context.Notes.Update(note);
@@ -23,51 +24,54 @@ namespace NoteBook.AccessData.Repositories
 
         public void Delete (Guid userId, int id)
         {
-            var note = GetNotesIncluded(userId)
+            var note = GetAllIncluded(userId)
                 .Single(n => n.Id.Equals(id));
+
             note.Deleted = true;
             Update(note);
         }
 
-        public Task<List<Note>> FindNotesAsync (Guid userId, string substirng, bool complete)
+        public Task<List<Note>> FindNotesAsync (Guid userId, bool complete, string substirng)
         {
-            return GetNotesIncluded(userId)
-                .Where(n =>
-                    n.Complete == complete
-                    && n.NoteText.Contains(substirng, StringComparison.InvariantCultureIgnoreCase))
-                .ToListAsync( );
+            return GetAllIncluded(userId,false,complete)
+                .Where(n=> n.NoteText.Contains(substirng, StringComparison.OrdinalIgnoreCase)).ToListAsync();
         }
 
-        public Task<List<Note>> GetByCategoryAsync (Guid userId, string categoryName, bool complete)
+        public Task<List<Note>> GetByCategoryAsync (Guid userId, bool complete, string categoryName)
         {
-            return GetNotesIncluded(userId)
-                .Where(n =>
-                    n.Category.Equals(categoryName)
-                    && n.Complete == complete)
-                .ToListAsync( );
+            return GetAllIncluded(userId)
+                .Where(n => n.Complete == complete && n.Category.CategoryName == categoryName).ToListAsync( );
+        }
+        public Task<List<Note>> GetAllAsync (Guid userId, bool complete)
+        {
+            return GetAllIncluded(userId).Where(n => n.Complete == complete).ToListAsync( );
         }
 
         public Task<Note> GetByIdAsync (Guid userId, int id)
         {
-            return GetNotesIncluded(userId).SingleAsync(n => n.Id == id);
+            return GetAllIncluded(userId).SingleAsync(n => n.Id == id);
         }
 
-        public Task<List<Note>> GetByPriorityAsync (Guid userId, string priority, bool complete)
+        public Task<List<Note>> GetRemindersAsync (Guid userId, bool complete, string category)
         {
-            return GetNotesIncluded(userId)
-                .Where(n =>
-                    n.Priority.Equals(priority)
-                    && n.Complete == complete)
-                .ToListAsync( );
+            return GetAllIncluded(userId, true, complete)
+                .Where(r => r.Category.CategoryName == category).ToListAsync( );
         }
 
         public Task<List<Note>> GetRemindersAsync (Guid userId, bool complete)
         {
-            return GetNotesIncluded(userId)
-                .Where(n =>
-                    n.UseReminder
-                    && n.Complete == complete)
-                .ToListAsync( );
+            return GetAllIncluded(userId, true, complete).ToListAsync( );
+        }
+
+        public Task<List<Note>> GetNotesAsync (Guid userId, bool complete)
+        {
+            return GetAllIncluded(userId, false, complete).ToListAsync( );
+        }
+
+        public Task<List<Note>> GetNotesAsync (Guid userId, bool complete, string categoryName)
+        {
+            return GetAllIncluded(userId, false, complete)
+                .Where(n => n.Category.CategoryName == categoryName).ToListAsync( );
         }
 
         public async Task SaveChangesAsync ( )
@@ -76,8 +80,16 @@ namespace NoteBook.AccessData.Repositories
         }
 
 
+        private IQueryable<Note> GetAllIncluded (Guid userId, bool isReminder, bool isComplete)
+        {
+            return GetAllIncluded(userId)
+                .Where(n =>
+                    n.Complete == isComplete
+                    && n.UseReminder == isReminder
+                   );
+        }
 
-        private IQueryable<Note> GetNotesIncluded (Guid userId)
+        private IQueryable<Note> GetAllIncluded (Guid userId)
         {
             return _context
                 .Notes

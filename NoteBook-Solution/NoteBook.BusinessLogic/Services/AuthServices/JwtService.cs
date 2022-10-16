@@ -22,7 +22,7 @@ namespace NoteBook.BusinessLogic.Services.AuthServices
             {
                 new Claim(ClaimTypes.Name, account.LoginName),
                 new Claim(ClaimTypes.Role, account.Role.ToString()),
-                new Claim("sub",account.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, account.UserId?.ToString() ??  account.Id.ToString())
             };
 
             var secret = _configuration.GetSection("Jwt:Key").Value;

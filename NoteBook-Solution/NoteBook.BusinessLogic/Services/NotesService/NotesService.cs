@@ -7,45 +7,94 @@ namespace NoteBook.BusinessLogic.Services.NotesService
 {
     internal class NotesService : INotesService
     {
+        const string ERROR = "Undocumented error";
         private readonly INotesRepository _repository;
         public NotesService (INotesRepository repository)
         {
             _repository = repository;
         }
 
-        public async Task<ServiceResponseDto<Note>> CreateAsync (Note note)
+        public async Task<ServiceResponseDto<Note>> CreateAsync (Guid userId, Note note)
         {
-            await _repository.AddAsync(note);
-            await _repository.SaveChangesAsync( );
-            return new ServiceResponseDto<Note>(note);
+            try
+            {
+                _repository.Add(note);
+                await _repository.SaveChangesAsync( );
+                return new ServiceResponseDto<Note>(note);
+            }
+            catch (Exception e)
+            {
+
+                return new ServiceResponseDto<Note>(default, e.InnerException?.Message ?? ERROR, 503);
+            }
+        }
+
+        public async Task<ServiceResponseDto<Note>> UpdateAsync (Guid userId, Note note)
+        {
+            try
+            {
+                _repository.Update(note);
+                await _repository.SaveChangesAsync( );
+                return new ServiceResponseDto<Note>(note);
+            }
+            catch (Exception e)
+            {
+
+                return new ServiceResponseDto<Note>(default, e.InnerException?.Message ?? ERROR, 503);
+            }
         }
 
         public async Task<ServiceResponseDto<Note>> DeleteAsync (Guid userId, int noteId)
         {
-            var note = await _repository.GetByIdAsync(userId, noteId);
-            if (note != null)
+            try
             {
-                note.Deleted = true;
-                await _repository.UpdateAsync(note);
+                _repository.Delete(userId, noteId);
                 await _repository.SaveChangesAsync( );
+                return new ServiceResponseDto<Note>(true, "Note deleted");
             }
-            return new ServiceResponseDto<Note>(true, "Note deleted");
+            catch (Exception e)
+            {
+
+                return new ServiceResponseDto<Note>(default, e.InnerException?.Message ?? ERROR, 503);
+            }
         }
 
-        public Task<ServiceResponseDto<List<Note>>> GetAllAsync (Guid userId)
+        public async Task<ServiceResponseDto<List<Note>>> GetAllAsync (Guid userId)
         {
-            // var notesQuery = await _repository.GetByCategoryAsync(userId, 1);
-            throw new NotImplementedException( );
+            var getComplete = await _repository.GetAllAsync(userId, true);
+            var getNotComplete = await _repository.GetAllAsync(userId, false);
+
+
+            var notes = new List<Note>( );
+            notes.AddRange(getComplete);
+            notes.AddRange(getNotComplete);
+
+            return new ServiceResponseDto<List<Note>>(notes);
         }
 
-        public Task<ServiceResponseDto<List<Note>>> GetRemindersAsync (Guid userId)
+        public async Task<ServiceResponseDto<List<Note>>> GetNotesAsync (Guid userId, bool complete)
         {
-            throw new NotImplementedException( );
+            var notes = await _repository.GetAllAsync(userId, complete);
+            return new ServiceResponseDto<List<Note>>(notes);
         }
 
-        public Task<ServiceResponseDto<Note>> UpdateAsync (Note note)
+
+        public async Task<ServiceResponseDto<List<Note>>> GetNotesAsync (Guid userId, bool complete, string category)
         {
-            throw new NotImplementedException( );
+            var notes = await _repository.GetByCategoryAsync(userId, complete,category);
+            return new ServiceResponseDto<List<Note>>(notes);
+        }
+
+        public async Task<ServiceResponseDto<List<Note>>> GetRemindersAsync (Guid userId, bool complete)
+        {
+            var notes = await _repository.GetRemindersAsync(userId, complete);
+            return new ServiceResponseDto<List<Note>>(notes);
+        }
+
+        public async Task<ServiceResponseDto<List<Note>>> GetRemindersAsync (Guid userId, bool complete, string category)
+        {
+            var notes = await _repository.GetRemindersAsync(userId, complete, category);
+            return new ServiceResponseDto<List<Note>>(notes);
         }
     }
 }

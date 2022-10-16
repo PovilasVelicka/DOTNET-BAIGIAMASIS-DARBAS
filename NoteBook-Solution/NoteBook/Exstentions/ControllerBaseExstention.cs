@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NoteBook.Common.Interfaces.DTOs;
-using NoteBook.Controllers.AuthController;
+using System.Security.Claims;
 
 namespace NoteBook.Exstentions
 {
@@ -17,6 +17,15 @@ namespace NoteBook.Exstentions
             });
             objectResult.StatusCode = serverResponseDto.StatuCode;
             return objectResult;
+        }
+
+        public static Guid GetUserGuid (this ClaimsPrincipal user)
+        {
+            var userIdClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            if (userIdClaim == null) { return Guid.Empty; }
+
+            Guid.TryParse(userIdClaim.Value, out Guid UserId);
+            return UserId;
         }
     }
 

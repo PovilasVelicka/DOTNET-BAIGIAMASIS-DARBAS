@@ -100,7 +100,7 @@ namespace NoteBook.BusinessLogic.Services.AuthServices
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
                 Role = role,
-                Disabled = false,
+                Disabled = false,                
             };
         }
     }

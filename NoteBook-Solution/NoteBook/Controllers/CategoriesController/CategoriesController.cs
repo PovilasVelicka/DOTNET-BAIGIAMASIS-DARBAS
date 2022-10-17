@@ -25,18 +25,13 @@ namespace NoteBook.Controllers.CategoriesController
         public async Task<IActionResult> GetAll ( )
         {
             var serviceResult = await _service.GetCategoriesAsync(this.GetUserGuid( ));
-            return this.GetActionResult(serviceResult, serviceResult.Object?.Select(c => new CategoryDto(c)) ?? new List<CategoryDto>( ));
+            return this.GetActionResult(serviceResult, serviceResult.Object?.Select(c => new CategoryDto(c)) ?? default);
         }
 
         [HttpPost("create")]
         public async Task<IActionResult> CreateCategory (CreateCategoryDto dto)
         {
-            var serviceResult = await _service.CreateCategoryAsync(
-                this.GetUserGuid( ),
-                new Category
-                {
-                    CategoryName = dto.CategoryName
-                });
+            var serviceResult = await _service.CreateCategoryAsync(this.GetUserGuid( ),dto.CategoryName);               
             return this.GetActionResult(serviceResult, new CategoryDto(serviceResult.Object!));
         }
 
@@ -45,11 +40,9 @@ namespace NoteBook.Controllers.CategoriesController
         {
             var serviceResult = await _service.UpdateCategoryAsync(
                 this.GetUserGuid( ),
-                new Category
-                {
-                    Id = id,
-                    CategoryName = dto.CategoryName
-                });
+                categoryId: id,
+                categoryName: dto.CategoryName) ;
+               
 
             return this.GetActionResult(serviceResult, new CategoryDto(serviceResult.Object!));
         }
@@ -59,7 +52,7 @@ namespace NoteBook.Controllers.CategoriesController
         {
             var serviceResult = await _service.DeleteCategoryAsync(
                 this.GetUserGuid( ),
-                id);
+                categoryId: id);
 
             return this.GetActionResult(serviceResult, new CategoryDto(serviceResult.Object!));
         }

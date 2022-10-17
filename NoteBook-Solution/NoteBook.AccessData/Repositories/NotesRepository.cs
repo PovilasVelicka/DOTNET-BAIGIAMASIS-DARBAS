@@ -30,6 +30,10 @@ namespace NoteBook.AccessData.Repositories
             note.Deleted = true;
             UpdateNote(note);
         }
+        public  Task<Note> GetNoteByNoteIdAsync (Guid userId, int noteId)
+        {
+            return GetAllNotesIncludet(userId).SingleAsync(n => n.Id == noteId);
+        }
 
         public Task<List<Note>> FindNotesAsync (Guid userId, bool complete, string substirng)
         {
@@ -112,6 +116,7 @@ namespace NoteBook.AccessData.Repositories
         public void UpdateCategory (Category category)
         {
             _context.Categories.Update(category);
+
         }
 
         public async Task SaveChangesAsync ( )

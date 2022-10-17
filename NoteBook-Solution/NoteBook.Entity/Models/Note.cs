@@ -39,7 +39,7 @@ namespace NoteBook.Entity.Models
 
         [ForeignKey("CategoryId")]
         [InverseProperty("Notes")]
-        public virtual Category Category { get; set; } = null!;
+        public virtual Category? Category { get; set; } = null!;
 
 
     }

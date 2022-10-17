@@ -17,7 +17,7 @@ namespace NoteBook.Controllers.NotesController.DTOs
         {
             Id = note.Id;
             Title = note.Title;
-            CategoryName = note.Category.CategoryName;
+            CategoryName = note.Category?.CategoryName ?? "";
             NoteText = note.NoteText;
             Fill = note.Fill;
             Color = note.Color;

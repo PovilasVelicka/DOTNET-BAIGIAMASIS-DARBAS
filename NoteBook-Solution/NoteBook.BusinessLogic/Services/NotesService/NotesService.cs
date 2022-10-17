@@ -15,8 +15,18 @@ namespace NoteBook.BusinessLogic.Services.NotesService
             _repository = repository;
         }
 
-        public async Task<ServiceResponseDto<Note>> CreateNoteAsync (Guid userId, Note note)
+        public async Task<ServiceResponseDto<Note>> CreateNoteAsync (Guid userId, string title, string noteText, int? categoryId, DateTime? setReminder)
         {
+            var note = new Note
+            {
+                UserId = userId,
+                Title = title,
+                NoteText = noteText,
+                CategoryId = categoryId,
+                Reminder = setReminder,
+                UseReminder = setReminder!=null
+            };
+
             try
             {
                 _repository.AddNote(note);
@@ -30,10 +40,17 @@ namespace NoteBook.BusinessLogic.Services.NotesService
             }
         }
 
-        public async Task<ServiceResponseDto<Note>> UpdateNoteAsync (Guid userId, Note note)
+        public async Task<ServiceResponseDto<Note>> UpdateNoteAsync (Guid userId, int noteId, string title, string noteText, int? categoryId, DateTime? setReminder)
         {
+            
             try
             {
+                var note = await _repository.GetNoteByNoteIdAsync(userId, noteId);
+                note.Title = title;
+                note.NoteText = noteText;
+                note.CategoryId=categoryId;
+                note.Reminder = setReminder;
+                note.UseReminder = setReminder!=null;   
                 _repository.UpdateNote(note);
                 await _repository.SaveChangesAsync( );
                 return new ServiceResponseDto<Note>(note);
@@ -102,14 +119,21 @@ namespace NoteBook.BusinessLogic.Services.NotesService
             return new ServiceResponseDto<List<Category>>(categories);
         }
 
-        public async Task<ServiceResponseDto<Category>> CreateCategoryAsync (Guid userId, Category category)
+        public async Task<ServiceResponseDto<Category>> CreateCategoryAsync (Guid userId, string categoryName)
         {
             try
             {
-                var existsCategory = await _repository.GetCategoryAsync(userId, category.CategoryName);
+                var existsCategory = await _repository.GetCategoryAsync(userId, categoryName);
                 if (existsCategory != null) return new ServiceResponseDto<Category>(existsCategory);
-                await _repository.CreateCategoryAsync(userId, category);
-                return new ServiceResponseDto<Category>(category);
+                var newCategory = new Category
+                {
+                    CategoryName = categoryName,
+                    Deleted = false
+                };
+
+                await _repository.CreateCategoryAsync(userId, newCategory);
+                await _repository.SaveChangesAsync( );
+                return new ServiceResponseDto<Category>(newCategory);
 
             }
             catch (Exception e)
@@ -119,13 +143,13 @@ namespace NoteBook.BusinessLogic.Services.NotesService
             }
         }
 
-        public async Task<ServiceResponseDto<Category>> UpdateCategoryAsync (Guid userId, Category category)
+        public async Task<ServiceResponseDto<Category>> UpdateCategoryAsync (Guid userId, int categoryId, string categoryName)
         {
             try
             {
-                var existCategory = await _repository.GetCategoryAsync(userId, category.Id);
+                var existCategory = await _repository.GetCategoryAsync(userId, categoryId);
                 if (existCategory == null) return new ServiceResponseDto<Category>(default, "Category not exists", (int)HttpStatusCode.NotFound);
-                existCategory.CategoryName = category.CategoryName;
+                existCategory.CategoryName = categoryName;
 
                 _repository.UpdateCategory(existCategory);
                 await _repository.SaveChangesAsync( );
@@ -155,5 +179,28 @@ namespace NoteBook.BusinessLogic.Services.NotesService
             }
 
         }
+
+        //private async Task<(Category? category, string message)> CreateCategoryAsync (Guid userId, string categoryName)
+        //{
+        //    try
+        //    {
+        //        var existsCategory = await _repository.GetCategoryAsync(userId, categoryName);
+        //        if (existsCategory != null) return (existsCategory, "");
+
+        //        var newCategory = new Category
+        //        {
+        //            CategoryName = categoryName,
+        //            Deleted = false,
+        //        };
+
+        //        await _repository.CreateCategoryAsync(userId, newCategory);
+        //        return (newCategory, "Category created");
+        //    }
+        //    catch (Exception e)
+        //    {
+
+        //        return (default, e.Message);
+        //    }
+        //}
     }
 }

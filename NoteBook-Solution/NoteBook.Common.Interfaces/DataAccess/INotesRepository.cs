@@ -7,6 +7,7 @@ namespace NoteBook.Common.Interfaces.DataAccess
         Task<Note> GetByIdAsync (Guid userId, int id);
         Task<List<Note>> GetAllAsync (Guid userId, bool complete);
         Task<List<Note>> GetByCategoryAsync (Guid userId, bool complete, string categoryName);
+        Task<Note> GetNoteByNoteIdAsync (Guid userId, int noteId);
         Task<List<Note>> GetNotesAsync (Guid userId, bool complete);
         Task<List<Note>> GetNotesAsync (Guid userId, bool complete, string categoryName);
         Task<List<Note>> GetRemindersAsync (Guid userId, bool complete);
@@ -25,5 +26,7 @@ namespace NoteBook.Common.Interfaces.DataAccess
         void DeleteCategory (Guid userId, int Id);
         void UpdateCategory (Category category);
         Task SaveChangesAsync ( );
+
+        
     }
 }

@@ -2,6 +2,7 @@
 using NoteBook.Common.Interfaces.DTOs;
 using NoteBook.Common.Interfaces.Services;
 using NoteBook.Entity.Models;
+using System.Drawing;
 using System.Net;
 
 namespace NoteBook.BusinessLogic.Services.NotesService
@@ -24,7 +25,7 @@ namespace NoteBook.BusinessLogic.Services.NotesService
                 NoteText = noteText,
                 CategoryId = categoryId,
                 Reminder = setReminder,
-                UseReminder = setReminder!=null
+                UseReminder = setReminder != null
             };
 
             try
@@ -42,15 +43,15 @@ namespace NoteBook.BusinessLogic.Services.NotesService
 
         public async Task<ServiceResponseDto<Note>> UpdateNoteAsync (Guid userId, int noteId, string title, string noteText, int? categoryId, DateTime? setReminder)
         {
-            
+
             try
             {
                 var note = await _repository.GetNoteByNoteIdAsync(userId, noteId);
                 note.Title = title;
                 note.NoteText = noteText;
-                note.CategoryId=categoryId;
+                note.CategoryId = categoryId;
                 note.Reminder = setReminder;
-                note.UseReminder = setReminder!=null;   
+                note.UseReminder = setReminder != null;
                 _repository.UpdateNote(note);
                 await _repository.SaveChangesAsync( );
                 return new ServiceResponseDto<Note>(note);
@@ -111,6 +112,23 @@ namespace NoteBook.BusinessLogic.Services.NotesService
         {
             var notes = await _repository.GetRemindersAsync(userId, complete, category);
             return new ServiceResponseDto<List<Note>>(notes);
+        }
+       
+        public async Task<ServiceResponseDto<Note>> ChangeNoteStyleAsync (Guid userId, int noteId, string color, string fill)
+        {
+            var note = await _repository.GetNoteByNoteIdAsync(userId, noteId);
+            note.Fill = fill;
+            note.Color = color;
+            await _repository.SaveChangesAsync( );
+            return new ServiceResponseDto<Note>(note);
+        }
+
+        public async Task<ServiceResponseDto<Note>> SetCompleteNoteAsync (Guid userId, int noteId)
+        {
+            var note = await _repository.GetNoteByNoteIdAsync(userId, noteId);
+            note.Complete = true;
+            await _repository.SaveChangesAsync( );
+            return new ServiceResponseDto<Note>(note);
         }
 
         public async Task<ServiceResponseDto<List<Category>>> GetCategoriesAsync (Guid userId)
@@ -180,27 +198,6 @@ namespace NoteBook.BusinessLogic.Services.NotesService
 
         }
 
-        //private async Task<(Category? category, string message)> CreateCategoryAsync (Guid userId, string categoryName)
-        //{
-        //    try
-        //    {
-        //        var existsCategory = await _repository.GetCategoryAsync(userId, categoryName);
-        //        if (existsCategory != null) return (existsCategory, "");
 
-        //        var newCategory = new Category
-        //        {
-        //            CategoryName = categoryName,
-        //            Deleted = false,
-        //        };
-
-        //        await _repository.CreateCategoryAsync(userId, newCategory);
-        //        return (newCategory, "Category created");
-        //    }
-        //    catch (Exception e)
-        //    {
-
-        //        return (default, e.Message);
-        //    }
-        //}
     }
 }

@@ -16,14 +16,15 @@ namespace NoteBook.BusinessLogic.Services.NotesService
             _repository = repository;
         }
 
-        public async Task<ServiceResponseDto<Note>> CreateNoteAsync (Guid userId, string title, string noteText, int? categoryId, DateTime? setReminder)
+        public async Task<ServiceResponseDto<Note>> CreateNoteAsync (Guid userId, string title, string noteText, string categoryName, DateTime? setReminder)
         {
+            var category = await _repository.GetCategoryAsync(userId, categoryName);
             var note = new Note
             {
                 UserId = userId,
                 Title = title,
                 NoteText = noteText,
-                CategoryId = categoryId,
+                Category = category,
                 Reminder = setReminder,
                 UseReminder = setReminder != null
             };
@@ -41,15 +42,16 @@ namespace NoteBook.BusinessLogic.Services.NotesService
             }
         }
 
-        public async Task<ServiceResponseDto<Note>> UpdateNoteAsync (Guid userId, int noteId, string title, string noteText, int? categoryId, DateTime? setReminder)
+        public async Task<ServiceResponseDto<Note>> UpdateNoteAsync (Guid userId, int noteId, string title, string noteText, string categoryName, DateTime? setReminder)
         {
 
             try
             {
+                var category = await _repository.GetCategoryAsync(userId, categoryName);
                 var note = await _repository.GetNoteByNoteIdAsync(userId, noteId);
                 note.Title = title;
                 note.NoteText = noteText;
-                note.CategoryId = categoryId;
+                note.Category = category;
                 note.Reminder = setReminder;
                 note.UseReminder = setReminder != null;
                 _repository.UpdateNote(note);

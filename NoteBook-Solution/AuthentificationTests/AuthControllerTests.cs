@@ -30,7 +30,7 @@ namespace AuthentificationTests
         public async Task SignUp_WhenUserExists_ResponseBadRequest (SignupDto signupDto)
         {
             _authServiceMock
-                .Setup(a => a.SignupNewAccountAsync(It.IsAny<string>( ), It.IsAny<string>( ), It.IsAny<string>( )))
+                .Setup(a => a.SignupNewAccountAsync(It.IsAny<string>( ), It.IsAny<string>( ), It.IsAny<string>( ), It.IsAny<string>( ), It.IsAny<string>( )))
                 .ReturnsAsync(new ServiceResponseDto<string>(null, "User name or email exists", 400));
 
             var response = await _sut.SignUp(signupDto);
@@ -42,7 +42,7 @@ namespace AuthentificationTests
         public async Task SignUp_WhenUserNotExists_CreateNewResponseOk (SignupDto signupDto)
         {
             _authServiceMock
-                .Setup(a => a.SignupNewAccountAsync(signupDto.UserName, signupDto.Password, signupDto.Email))
+                .Setup(a => a.SignupNewAccountAsync(signupDto.UserName, signupDto.Password, signupDto.Email, signupDto.FirstName, signupDto.LastName))
                 .ReturnsAsync(new ServiceResponseDto<string>(true,"User created"));
 
             var response = await _sut.SignUp(signupDto);

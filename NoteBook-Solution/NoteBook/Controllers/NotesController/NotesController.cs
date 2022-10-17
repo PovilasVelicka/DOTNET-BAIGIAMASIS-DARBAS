@@ -65,7 +65,7 @@ namespace NoteBook.Controllers.NotesController
         }
 
         [HttpPatch("update/{id}")]
-        public async Task<IActionResult> UpdateNoteAsync (int id, CreateNoteDto noteDto)
+        public async Task<IActionResult> UpdateNoteAsync (int id, NoteDto noteDto)
         {
             var userGuid = this.GetUserGuid( );
             var result = await _notesService.UpdateNoteAsync(
@@ -74,7 +74,8 @@ namespace NoteBook.Controllers.NotesController
                 title: noteDto.Title,
                 noteText: noteDto.NoteText,
                 categoryName: noteDto.CategoryName,
-                setReminder: noteDto.ReminderDate);
+                setReminder: noteDto.Reminder
+                );
 
             return this.GetActionResult(result,new NoteDto( result.Object!));
         }

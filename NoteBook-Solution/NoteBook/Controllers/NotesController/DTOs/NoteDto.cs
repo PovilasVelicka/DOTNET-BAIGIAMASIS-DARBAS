@@ -5,12 +5,14 @@ namespace NoteBook.Controllers.NotesController.DTOs
     public class NoteDto
     {
         public int Id { get; set; }
-        public string Title { get; set; } = null!;
-        public string CategoryName { get; set; } = null!;
-        public string NoteText { get; set; } = null!;
-        public string Fill { get; set; } = null!;
-        public string Color { get; set; } = null!;
-        public string Priority { get; set; } = null!;
+        public string? Title { get; set; } = null!;
+        public string? CategoryName { get; set; } = null!;
+        public string? NoteText { get; set; } = null!;
+        public string? Fill { get; set; } = null!;
+        public string? Color { get; set; } = null!;
+        public string? Priority { get; set; } = null!;
+        public DateTimeOffset? Reminder { get; set; }
+        public bool UseReminder { get; set; }
         public bool Complete { get; set; }
         public NoteDto ( ) { }
         public NoteDto (Note note)
@@ -23,6 +25,8 @@ namespace NoteBook.Controllers.NotesController.DTOs
             Color = note.Color;
             Priority = note.Priority.ToString( );
             Complete = note.Complete;
+            Reminder = note.Reminder;
+            UseReminder = note.UseReminder;
         }
     }
 }

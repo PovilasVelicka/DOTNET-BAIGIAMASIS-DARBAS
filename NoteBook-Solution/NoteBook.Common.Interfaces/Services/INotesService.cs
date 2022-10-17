@@ -1,4 +1,5 @@
 ﻿using NoteBook.Common.Interfaces.DTOs;
+using NoteBook.Entity.Enums;
 using NoteBook.Entity.Models;
 
 namespace NoteBook.Common.Interfaces.Services
@@ -12,8 +13,17 @@ namespace NoteBook.Common.Interfaces.Services
         Task<ServiceResponseDto<List<Note>>> GetRemindersAsync (Guid userId, bool complete, string category);
 
 
-        Task<ServiceResponseDto<Note>> CreateNoteAsync (Guid userId, string title, string noteText, string categoryName, DateTime? setReminder);
-        Task<ServiceResponseDto<Note>> UpdateNoteAsync (Guid userId, int noteId, string title, string noteText, string categoryName, DateTime? setReminder );
+        Task<ServiceResponseDto<Note>> CreateNoteAsync (Guid userId, string title, string noteText, string categoryName, DateTimeOffset? setReminder);
+        Task<ServiceResponseDto<Note>> UpdateNoteAsync (Guid userId, int noteId,
+             string? title = null,
+            string? noteText = null,
+            string? categoryName = null,
+            DateTimeOffset? setReminder = null,
+            Priority? priority = null,
+            bool? useReminder = null,
+            bool? complete = null,
+            string? fill = null,
+            string? color = null)
         Task<ServiceResponseDto<Note>> DeleteNoteAsync (Guid userId, int noteId);
         Task<ServiceResponseDto<Note>> ChangeNoteStyleAsync (Guid userId, int noteId, string color, string fill);
         Task<ServiceResponseDto<Note>> SetCompleteNoteAsync (Guid userId, int noteId);

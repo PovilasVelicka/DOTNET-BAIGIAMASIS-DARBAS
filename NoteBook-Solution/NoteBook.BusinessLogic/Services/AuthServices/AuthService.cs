@@ -52,12 +52,12 @@ namespace NoteBook.BusinessLogic.Services.AuthServices
 
             if (await _accountsRepository.GetByEmailAsync(email) != null)
             {
-                return new ServiceResponseDto<string>(null, "Eail already exists", (int)HttpStatusCode.Conflict);
+                return new ServiceResponseDto<string>(null, "Email already exists", (int)HttpStatusCode.Conflict);
             }
 
             var adminCount = await _accountsRepository.CountRoleAsync(Role.PeopleAdmin);
 
-            var account = CreateAccount(loginName, password, email, adminCount == 0 ? Role.PeopleAdmin : Role.Guest, firstName, lastName);
+            var account = CreateAccount(loginName, password, email, adminCount == 0 ? Role.PeopleAdmin : Role.StandartUser, firstName, lastName);
 
             await _accountsRepository.AddAsync(account);
 

@@ -30,9 +30,10 @@ namespace NoteBook.AccessData.Repositories
             note.Deleted = true;
             UpdateNote(note);
         }
-        public  Task<Note> GetNoteByNoteIdAsync (Guid userId, int noteId)
+        public Task<Note> GetNoteByNoteIdAsync (Guid userId, int noteId)
         {
-            return GetAllNotesIncludet(userId).SingleAsync(n => n.Id == noteId);
+            return GetAllNotesIncludet(userId)
+                .SingleAsync(n => n.Id == noteId);
         }
 
         public Task<List<Note>> FindNotesAsync (Guid userId, bool complete, string substirng)
@@ -44,7 +45,8 @@ namespace NoteBook.AccessData.Repositories
         public Task<List<Note>> GetByCategoryAsync (Guid userId, bool complete, string categoryName)
         {
             return GetAllNotesIncludet(userId)
-                .Where(n => n.Complete == complete && n.Category.CategoryName == categoryName).ToListAsync( );
+                .Where(n => n.Complete == complete && n.Category != null && n.Category.CategoryName == categoryName)
+                .ToListAsync( );
         }
         public Task<List<Note>> GetAllAsync (Guid userId, bool complete)
         {
@@ -59,7 +61,8 @@ namespace NoteBook.AccessData.Repositories
         public Task<List<Note>> GetRemindersAsync (Guid userId, bool complete, string category)
         {
             return GetAllNotesIncludet(userId, true, complete)
-                .Where(r => r.Category.CategoryName == category).ToListAsync( );
+                .Where(r => r.Category != null && r.Category.CategoryName == category)
+                .ToListAsync( );
         }
 
         public Task<List<Note>> GetRemindersAsync (Guid userId, bool complete)
@@ -75,7 +78,8 @@ namespace NoteBook.AccessData.Repositories
         public Task<List<Note>> GetNotesAsync (Guid userId, bool complete, string categoryName)
         {
             return GetAllNotesIncludet(userId, false, complete)
-                .Where(n => n.Category.CategoryName == categoryName).ToListAsync( );
+                .Where(n => n.Category != null && n.Category.CategoryName == categoryName)
+                .ToListAsync( );
         }
 
         public Task<List<Category>> GetCategoriesAsync (Guid userId)

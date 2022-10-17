@@ -1,8 +1,8 @@
 ﻿using NoteBook.Common.Interfaces.DataAccess;
 using NoteBook.Common.Interfaces.DTOs;
 using NoteBook.Common.Interfaces.Services;
+using NoteBook.Entity.Enums;
 using NoteBook.Entity.Models;
-using System.Drawing;
 using System.Net;
 
 namespace NoteBook.BusinessLogic.Services.NotesService
@@ -16,7 +16,7 @@ namespace NoteBook.BusinessLogic.Services.NotesService
             _repository = repository;
         }
 
-        public async Task<ServiceResponseDto<Note>> CreateNoteAsync (Guid userId, string title, string noteText, string categoryName, DateTime? setReminder)
+        public async Task<ServiceResponseDto<Note>> CreateNoteAsync (Guid userId, string title, string noteText, string categoryName, DateTimeOffset? setReminder)
         {
             var category = await _repository.GetCategoryAsync(userId, categoryName);
             var note = new Note
@@ -42,18 +42,35 @@ namespace NoteBook.BusinessLogic.Services.NotesService
             }
         }
 
-        public async Task<ServiceResponseDto<Note>> UpdateNoteAsync (Guid userId, int noteId, string title, string noteText, string categoryName, DateTime? setReminder)
+        public async Task<ServiceResponseDto<Note>> UpdateNoteAsync (Guid userId, int noteId,
+            string? title = null,
+            string? noteText = null,
+            string? categoryName = null,
+            DateTimeOffset? setReminder = null,
+            Priority? priority = null,
+            bool? useReminder = null,
+            bool? complete = null,
+            string? fill = null,
+            string? color = null)
         {
-
             try
             {
-                var category = await _repository.GetCategoryAsync(userId, categoryName);
                 var note = await _repository.GetNoteByNoteIdAsync(userId, noteId);
-                note.Title = title;
-                note.NoteText = noteText;
-                note.Category = category;
-                note.Reminder = setReminder;
-                note.UseReminder = setReminder != null;
+
+                if (title != null) note.Title = title;
+                if (noteText != null) note.NoteText = noteText;
+                if (categoryName != null)
+                {
+                    var category = await _repository.GetCategoryAsync(userId, categoryName);
+                    note.Category = category;
+                }
+                if (setReminder != null) note.Reminder = setReminder;
+                if (useReminder != null) note.UseReminder = (bool)useReminder;
+                if (complete != null) note.Complete = (bool)complete;
+                if (fill != null) note.Fill = fill;
+                if (color != null) note.Color = color;
+                if (priority != null) note.Priority = (Priority)priority;
+
                 _repository.UpdateNote(note);
                 await _repository.SaveChangesAsync( );
                 return new ServiceResponseDto<Note>(note);
@@ -115,7 +132,7 @@ namespace NoteBook.BusinessLogic.Services.NotesService
             var notes = await _repository.GetRemindersAsync(userId, complete, category);
             return new ServiceResponseDto<List<Note>>(notes);
         }
-       
+
         public async Task<ServiceResponseDto<Note>> ChangeNoteStyleAsync (Guid userId, int noteId, string color, string fill)
         {
             var note = await _repository.GetNoteByNoteIdAsync(userId, noteId);
@@ -199,7 +216,6 @@ namespace NoteBook.BusinessLogic.Services.NotesService
             }
 
         }
-
 
     }
 }

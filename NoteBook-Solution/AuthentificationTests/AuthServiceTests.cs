@@ -55,7 +55,7 @@ namespace AuthentificationTests
                 .Setup(t => t.GetJwtToken(It.IsAny<Account>( )))
                 .Returns("JWTTOKENEXAMPLE");
 
-            var signUpResponse = await _sut.SignupNewAccountAsync(signUpDto.UserName, signUpDto.Password, signUpDto.Email);
+            var signUpResponse = await _sut.SignupNewAccountAsync(signUpDto.UserName, signUpDto.Password, signUpDto.Email,signUpDto.FirstName,signUpDto.LastName);
             Assert.True(signUpResponse.IsSuccess);
     
 
@@ -87,7 +87,7 @@ namespace AuthentificationTests
                 .Setup(t => t.GetJwtToken(It.IsAny<Account>( )))
                 .Returns("JWTTOKENEXAMPLE");
 
-            var signUpResponse = await _sut.SignupNewAccountAsync(signUpDto.UserName, signUpDto.Password, signUpDto.Email);
+            var signUpResponse = await _sut.SignupNewAccountAsync(signUpDto.UserName, signUpDto.Password, signUpDto.Email, signUpDto.FirstName, signUpDto.LastName);
             Assert.True(signUpResponse.IsSuccess);
 
             _accountRepositoryMock

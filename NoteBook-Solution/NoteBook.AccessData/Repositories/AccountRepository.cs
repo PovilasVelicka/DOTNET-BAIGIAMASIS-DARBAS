@@ -30,6 +30,8 @@ namespace NoteBook.AccessData.Repositories
         {
             return await
                 GetAccountsIncludeEmails( )
+                .Include(n=>n.User.LastName)
+                .Include(n=> n.User.FirstName)
                 .SingleOrDefaultAsync(a => a.LoginName == userLogin);
         }
 

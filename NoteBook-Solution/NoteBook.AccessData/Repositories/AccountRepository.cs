@@ -17,6 +17,11 @@ namespace NoteBook.AccessData.Repositories
 
         public async Task AddAsync (Account account)
         {
+            var fName = _appDbContext.FirstNames.SingleOrDefault(fn => fn.Value == account.User.FirstName.Value);
+            var lName = _appDbContext.LastNames.SingleOrDefault(ln => ln.Value == account.User.LastName.Value);
+
+            if (fName != null) account.User.FirstName = fName;
+            if (lName != null) account.User.LastName = lName;
 
             await _appDbContext.Accounts.AddAsync(account);
         }

@@ -7,6 +7,8 @@ namespace NoteBook.Controllers.PeopleAdminController.DTOs
     {
         public string LoginName { get; set; } = null!;
         public string Email { get; set; } = null!;
+        public string FirstName { get; set; } = null!;
+        public string LastName { get; set; }=null!;
         public Role UserRole { get; set; }
         public UserDto ( ) { }
         public UserDto ( Account? account)
@@ -15,6 +17,8 @@ namespace NoteBook.Controllers.PeopleAdminController.DTOs
             LoginName = account.LoginName;
             Email = account.Email.Value;
             UserRole = account.Role;
+            FirstName = account.User.FirstName.Value;
+            LastName = account.User.LastName.Value;
         }
     }
 }

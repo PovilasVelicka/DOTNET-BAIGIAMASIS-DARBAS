@@ -28,7 +28,9 @@ namespace NoteBook.Controllers.AuthController
             var serviceResponse = await _authService.SignupNewAccountAsync(
                   signUpModel.UserName,
                   signUpModel.Password,
-                  signUpModel.Email);
+                  signUpModel.Email,
+                  signUpModel.FirstName,
+                  signUpModel.LastName);
 
             return this.GetActionResult(serviceResponse, serviceResponse.Object);
         }

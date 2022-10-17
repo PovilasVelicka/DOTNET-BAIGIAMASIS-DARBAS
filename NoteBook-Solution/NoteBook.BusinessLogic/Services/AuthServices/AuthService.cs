@@ -43,7 +43,7 @@ namespace NoteBook.BusinessLogic.Services.AuthServices
             return new ServiceResponseDto<string>(_jwtService.GetJwtToken(account), "Login succesfull", (int)HttpStatusCode.OK);
         }
 
-        public async Task<ServiceResponseDto<string>> SignupNewAccountAsync (string loginName, string password, string email)
+        public async Task<ServiceResponseDto<string>> SignupNewAccountAsync (string loginName, string password, string email, string firstName, string lastName)
         {
             if (await _accountsRepository.GetByNameAsync(loginName) != null)
             {
@@ -57,7 +57,7 @@ namespace NoteBook.BusinessLogic.Services.AuthServices
 
             var adminCount = await _accountsRepository.CountRoleAsync(Role.PeopleAdmin);
 
-            var account = CreateAccount(loginName, password, email, adminCount == 0 ? Role.PeopleAdmin : Role.Guest);
+            var account = CreateAccount(loginName, password, email, adminCount == 0 ? Role.PeopleAdmin : Role.Guest, firstName, lastName);
 
             await _accountsRepository.AddAsync(account);
 
@@ -88,7 +88,7 @@ namespace NoteBook.BusinessLogic.Services.AuthServices
             return new ServiceResponseDto<string>(_jwtService.GetJwtToken(account), "", (int)HttpStatusCode.Created);
         }
 
-        private static Account CreateAccount (string loginName, string password, string email, Role role)
+        private static Account CreateAccount (string loginName, string password, string email, Role role, string firstName, string lastName)
         {
             var (passwordHash, passwordSalt) = password.CreatePasswordHash( );
 
@@ -100,7 +100,12 @@ namespace NoteBook.BusinessLogic.Services.AuthServices
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
                 Role = role,
-                Disabled = false,                
+                Disabled = false,       
+                User = new User
+                {
+                    FirstName = new FirstName(firstName),
+                    LastName = new LastName(lastName),
+                }
             };
         }
     }

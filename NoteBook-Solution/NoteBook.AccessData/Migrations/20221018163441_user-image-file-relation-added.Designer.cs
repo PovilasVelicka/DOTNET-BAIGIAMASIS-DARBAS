@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NoteBook.Entity.Models;
 
@@ -11,9 +12,10 @@ using NoteBook.Entity.Models;
 namespace NoteBook.AccessData.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221018163441_user-image-file-relation-added")]
+    partial class userimagefilerelationadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,22 +147,7 @@ namespace NoteBook.AccessData.Migrations
                     b.ToTable("Emails", "general");
                 });
 
-            modelBuilder.Entity("NoteBook.Entity.Models.FileContent", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
-
-                    b.Property<byte[]>("Bites")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FilesContents", "general");
-                });
-
-            modelBuilder.Entity("NoteBook.Entity.Models.FileProperty", b =>
+            modelBuilder.Entity("NoteBook.Entity.Models.File", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -187,6 +174,21 @@ namespace NoteBook.AccessData.Migrations
                     b.HasIndex("FileContentId");
 
                     b.ToTable("Files", "general");
+                });
+
+            modelBuilder.Entity("NoteBook.Entity.Models.FileContent", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<byte[]>("Bites")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FilesContents", "general");
                 });
 
             modelBuilder.Entity("NoteBook.Entity.Models.FirstName", b =>
@@ -256,9 +258,6 @@ namespace NoteBook.AccessData.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("FileId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Fill")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -295,8 +294,6 @@ namespace NoteBook.AccessData.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("FileId");
 
                     b.HasIndex("UserId");
 
@@ -366,7 +363,7 @@ namespace NoteBook.AccessData.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("NoteBook.Entity.Models.FileProperty", b =>
+            modelBuilder.Entity("NoteBook.Entity.Models.File", b =>
                 {
                     b.HasOne("NoteBook.Entity.Models.FileContent", "FileContent")
                         .WithMany("Files")
@@ -383,10 +380,6 @@ namespace NoteBook.AccessData.Migrations
                         .WithMany("Notes")
                         .HasForeignKey("CategoryId");
 
-                    b.HasOne("NoteBook.Entity.Models.FileProperty", "File")
-                        .WithMany()
-                        .HasForeignKey("FileId");
-
                     b.HasOne("NoteBook.Entity.Models.User", "User")
                         .WithMany("Notes")
                         .HasForeignKey("UserId")
@@ -395,14 +388,12 @@ namespace NoteBook.AccessData.Migrations
 
                     b.Navigation("Category");
 
-                    b.Navigation("File");
-
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("NoteBook.Entity.Models.User", b =>
                 {
-                    b.HasOne("NoteBook.Entity.Models.FileProperty", "File")
+                    b.HasOne("NoteBook.Entity.Models.File", "File")
                         .WithMany()
                         .HasForeignKey("FileId");
 

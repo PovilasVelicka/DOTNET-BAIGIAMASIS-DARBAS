@@ -142,7 +142,8 @@ namespace NoteBook.AccessData.Repositories
             return _context
                 .Notes
                 .Include(c => c.Category)
-                .Include(u => u.User)
+                 .Include(u => u.User)
+                .Include(f => f.File).ThenInclude(c=> c!.FileContent)               
                 .Where(n =>
                     !n.Deleted
                     && n.UserId == userId);
@@ -152,7 +153,7 @@ namespace NoteBook.AccessData.Repositories
         {
             return _context
                 .Categories
-                .Include(u => u.Users)
+                .Include(u => u.Users)                
                 .Where(n =>
                     !n.Deleted
                     && n.Users.Any(u => u.Id == userId));

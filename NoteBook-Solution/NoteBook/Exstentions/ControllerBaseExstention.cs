@@ -18,7 +18,7 @@ namespace NoteBook.Exstentions
             objectResult.StatusCode = serverResponseDto.StatuCode;
             return objectResult;
         }
-
+  
         public static Guid GetUserGuid (this ControllerBase controller)
         {
             var userIdClaim = controller.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);

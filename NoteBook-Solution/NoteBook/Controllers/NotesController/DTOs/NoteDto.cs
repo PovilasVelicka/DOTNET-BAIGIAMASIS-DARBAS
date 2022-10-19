@@ -4,7 +4,7 @@ namespace NoteBook.Controllers.NotesController.DTOs
 {
     public class NoteDto
     {
-        public int Id { get; set; }
+        public int Id { get; }
         public string? Title { get; set; } = null!;
         public string? CategoryName { get; set; } = null!;
         public string? NoteText { get; set; } = null!;
@@ -12,11 +12,14 @@ namespace NoteBook.Controllers.NotesController.DTOs
         public string? Color { get; set; } = null!;
         public string? Priority { get; set; } = null!;
         public DateTimeOffset? Reminder { get; set; }
-        public bool UseReminder { get; set; }
-        public bool Complete { get; set; }
+        public bool? UseReminder { get; set; }
+        public bool? Complete { get; set; }
+        public int? ImageId { get; set; }
+        public BgImageDto? BackGround { get; }
         public NoteDto ( ) { }
-        public NoteDto (Note note)
+        public NoteDto (Note? note)
         {
+            if (note == null) return;
             Id = note.Id;
             Title = note.Title;
             CategoryName = note.Category?.CategoryName ?? "";
@@ -27,6 +30,8 @@ namespace NoteBook.Controllers.NotesController.DTOs
             Complete = note.Complete;
             Reminder = note.Reminder;
             UseReminder = note.UseReminder;
+            ImageId = note.FileId;
+            BackGround = note.File != null ? new BgImageDto(note.File.FileContent.Bites, note.File.ContentType) : null;
         }
     }
 }

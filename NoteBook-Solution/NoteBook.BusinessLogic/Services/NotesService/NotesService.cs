@@ -11,9 +11,11 @@ namespace NoteBook.BusinessLogic.Services.NotesService
     {
         const string ERROR = "Undocumented error";
         private readonly INotesRepository _repository;
-        public NotesService (INotesRepository repository)
+        private readonly IFilesService _filesService;
+        public NotesService (INotesRepository repository, IFilesService filesService)
         {
             _repository = repository;
+            _filesService = filesService;
         }
 
         public async Task<ServiceResponseDto<Note>> CreateNoteAsync (Guid userId, string title, string noteText, string categoryName, DateTimeOffset? setReminder)
@@ -46,8 +48,8 @@ namespace NoteBook.BusinessLogic.Services.NotesService
             string? title = null,
             string? noteText = null,
             string? categoryName = null,
-            DateTimeOffset? setReminder = null,
-            Priority? priority = null,
+            DateTimeOffset? reminderDate = null,
+            string? priority = null,
             bool? useReminder = null,
             bool? complete = null,
             string? fill = null,
@@ -64,12 +66,12 @@ namespace NoteBook.BusinessLogic.Services.NotesService
                     var category = await _repository.GetCategoryAsync(userId, categoryName);
                     note.Category = category;
                 }
-                if (setReminder != null) note.Reminder = setReminder;
-                if (useReminder != null) note.UseReminder = (bool)useReminder;
-                if (complete != null) note.Complete = (bool)complete;
+                if (reminderDate.HasValue) note.Reminder = reminderDate;
+                if (useReminder.HasValue) note.UseReminder = useReminder.Value;
+                if (complete.HasValue) note.Complete = complete.Value;
                 if (fill != null) note.Fill = fill;
                 if (color != null) note.Color = color;
-                if (priority != null) note.Priority = (Priority)priority;
+                if (priority != null) note.Priority = (Priority)Enum.Parse(typeof(Priority), priority);
 
                 _repository.UpdateNote(note);
                 await _repository.SaveChangesAsync( );
@@ -214,8 +216,42 @@ namespace NoteBook.BusinessLogic.Services.NotesService
 
                 return new ServiceResponseDto<Category>(default, e.Message, 503);
             }
-
         }
 
+        public async Task<ServiceResponseDto<Note>> UpdateBgImageAsync (Guid userId, int noteId, byte[ ] imageBytes, string contentType, string fileName)
+        {
+            try
+            {
+                var savedImageId = await _filesService.AddFileAsync(imageBytes, contentType, fileName);
+                var note = await _repository.GetNoteByNoteIdAsync(userId, noteId);
+
+                note.FileId = savedImageId;
+                _repository.UpdateNote(note);
+                await _repository.SaveChangesAsync( );
+                return new ServiceResponseDto<Note>(note, "", 200);
+            }
+            catch (Exception e)
+            {
+
+                return new ServiceResponseDto<Note>(default, e.Message, 503);
+            }
+        }
+
+        public async Task<ServiceResponseDto<Note>> RemoveBgImageAsync (Guid userId, int noteId)
+        {
+            try
+            {
+                var note = await _repository.GetNoteByNoteIdAsync(userId, noteId);
+
+                if (note.FileId.HasValue) await _filesService.DeleteFileAsync(note.FileId.Value);
+                await _repository.SaveChangesAsync( );
+                return new ServiceResponseDto<Note>(note);
+            }
+            catch (Exception e)
+            {
+
+                return new ServiceResponseDto<Note>(default, e.Message, 503);
+            }
+        }
     }
 }

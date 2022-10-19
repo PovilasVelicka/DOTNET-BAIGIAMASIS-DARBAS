@@ -41,6 +41,7 @@ namespace NoteBook.Entity.Models
         [InverseProperty("Notes")]
         public virtual Category? Category { get; set; } = null!;
 
-
+        public virtual int? FileId { get; set; }
+        public virtual FileHead? File { get; set; }
     }
 }

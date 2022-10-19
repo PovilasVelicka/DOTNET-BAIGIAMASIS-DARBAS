@@ -16,6 +16,8 @@ namespace NoteBook.Entity.Models
         public virtual DbSet<FirstName> FirstNames { get; set; } = null!;
         public virtual DbSet<LastName> LastNames { get; set; } = null!;
         public virtual DbSet<Note> Notes { get; set; } = null!;
+        public virtual DbSet<FileHead> Files { get; set; } = null!;
+        public virtual DbSet<FileContent> FilesContents { get; set; } = null!;
 
         public override Task<int> SaveChangesAsync (CancellationToken cancellationToken = default)
         {
@@ -49,7 +51,7 @@ namespace NoteBook.Entity.Models
             {
                 entity.Property(e => e.Id).ValueGeneratedOnAdd( );
 
-               
+
             });
 
             modelBuilder.Entity<Note>(entity =>
@@ -62,11 +64,23 @@ namespace NoteBook.Entity.Models
 
                 entity.Property(e => e.CategoryId).IsRequired(false);
 
+
+
                 entity.Property(p => p.Priority)
                .HasConversion(
                    u => u.ToString( ),
                    d => (Priority)Enum.Parse(typeof(Priority), d));
             });
+
+            //modelBuilder.Entity<File>(entity =>          
+            //        entity.Property(e => e.FileContentId).IsRequired(false)              
+            //);
+
+            //modelBuilder.Entity<FileContent>( )
+            //    .HasMany(e => e.Files)
+            //    .WithOne(e => e.FileContent)
+            //    .OnDelete(DeleteBehavior.SetNull);
+
 
             OnModelCreatingPartial(modelBuilder);
         }

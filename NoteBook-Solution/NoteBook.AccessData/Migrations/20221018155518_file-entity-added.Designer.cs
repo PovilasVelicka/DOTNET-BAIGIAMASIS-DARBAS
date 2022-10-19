@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NoteBook.Entity.Models;
 
@@ -11,9 +12,10 @@ using NoteBook.Entity.Models;
 namespace NoteBook.AccessData.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221018155518_file-entity-added")]
+    partial class fileentityadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,50 +147,6 @@ namespace NoteBook.AccessData.Migrations
                     b.ToTable("Emails", "general");
                 });
 
-            modelBuilder.Entity("NoteBook.Entity.Models.FileContent", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
-
-                    b.Property<byte[]>("Bites")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FilesContents", "general");
-                });
-
-            modelBuilder.Entity("NoteBook.Entity.Models.FileProperty", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ContentType")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("FileContentId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(40)");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FileContentId");
-
-                    b.ToTable("Files", "general");
-                });
-
             modelBuilder.Entity("NoteBook.Entity.Models.FirstName", b =>
                 {
                     b.Property<int>("Id")
@@ -256,9 +214,6 @@ namespace NoteBook.AccessData.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("FileId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Fill")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -296,8 +251,6 @@ namespace NoteBook.AccessData.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("FileId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Notes", "notebook");
@@ -308,9 +261,6 @@ namespace NoteBook.AccessData.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("FileId")
-                        .HasColumnType("int");
 
                     b.Property<int>("FirstNameId")
                         .HasColumnType("int");
@@ -324,8 +274,6 @@ namespace NoteBook.AccessData.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FileId");
 
                     b.HasIndex(new[] { "FirstNameId" }, "IX_Users_FirstNameId");
 
@@ -366,26 +314,11 @@ namespace NoteBook.AccessData.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("NoteBook.Entity.Models.FileProperty", b =>
-                {
-                    b.HasOne("NoteBook.Entity.Models.FileContent", "FileContent")
-                        .WithMany("Files")
-                        .HasForeignKey("FileContentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FileContent");
-                });
-
             modelBuilder.Entity("NoteBook.Entity.Models.Note", b =>
                 {
                     b.HasOne("NoteBook.Entity.Models.Category", "Category")
                         .WithMany("Notes")
                         .HasForeignKey("CategoryId");
-
-                    b.HasOne("NoteBook.Entity.Models.FileProperty", "File")
-                        .WithMany()
-                        .HasForeignKey("FileId");
 
                     b.HasOne("NoteBook.Entity.Models.User", "User")
                         .WithMany("Notes")
@@ -395,17 +328,11 @@ namespace NoteBook.AccessData.Migrations
 
                     b.Navigation("Category");
 
-                    b.Navigation("File");
-
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("NoteBook.Entity.Models.User", b =>
                 {
-                    b.HasOne("NoteBook.Entity.Models.FileProperty", "File")
-                        .WithMany()
-                        .HasForeignKey("FileId");
-
                     b.HasOne("NoteBook.Entity.Models.FirstName", "FirstName")
                         .WithMany("Users")
                         .HasForeignKey("FirstNameId")
@@ -417,8 +344,6 @@ namespace NoteBook.AccessData.Migrations
                         .HasForeignKey("LastNameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("File");
 
                     b.Navigation("FirstName");
 
@@ -434,11 +359,6 @@ namespace NoteBook.AccessData.Migrations
                 {
                     b.Navigation("Accounts")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("NoteBook.Entity.Models.FileContent", b =>
-                {
-                    b.Navigation("Files");
                 });
 
             modelBuilder.Entity("NoteBook.Entity.Models.FirstName", b =>

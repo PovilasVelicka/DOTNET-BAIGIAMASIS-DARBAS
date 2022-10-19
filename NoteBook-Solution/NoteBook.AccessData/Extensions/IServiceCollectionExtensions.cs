@@ -17,6 +17,7 @@ namespace NoteBook.AccessData.Extensions
 
             services.AddScoped<IAccountsRepository, AccountsRepository>( );
             services.AddScoped<INotesRepository, NotesRepository>( );
+            services.AddScoped<IFilesRepository, FilesRepository>( );
             return services;
         }
     }

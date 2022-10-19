@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using NoteBook.BusinessLogic.Services.AuthServices;
+using NoteBook.BusinessLogic.Services.FilesServices;
 using NoteBook.BusinessLogic.Services.NotesService;
 using NoteBook.BusinessLogic.Services.PeopleAdmin;
 using NoteBook.Common.Interfaces.Services;
@@ -30,6 +31,7 @@ namespace NoteBook.BusinessLogic.Extensions
             services.AddAuthorizationCore( );
             services.AddScoped<IAuthService, AuthService>( );
             services.AddScoped<IJwtService, JwtService>( );
+            services.AddScoped<IFilesService, FilesService>( );
             return services;
         }
 

@@ -41,6 +41,11 @@ namespace NoteBook.Entity.Models
         public virtual Account Account { get; set; } = null!;
 
 
+     
+        public virtual int? FileId { get; set; }       
+        public virtual FileHead? File { get; set; }
+
+
 
     }
 }

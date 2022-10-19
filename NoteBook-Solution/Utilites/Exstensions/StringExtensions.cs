@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+﻿using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Utilites.Exstensions
 {
@@ -85,5 +81,18 @@ namespace Utilites.Exstensions
             var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
             return computedHash.SequenceEqual(passwordHash);
         }
+
+        public static string GetCheckSum (this string data) => GetCheckSum(Encoding.UTF8.GetBytes(data));
+
+        public static string GetCheckSum (this byte[ ] data)
+        {
+            using var sha1 = SHA1.Create();            
+            return string.Concat(
+                sha1.ComputeHash(data)
+                .Select(x => x.ToString("X2")));
+        }
+
+        
+       
     }
 }

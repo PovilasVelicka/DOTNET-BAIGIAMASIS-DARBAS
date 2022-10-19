@@ -27,9 +27,7 @@ namespace NoteBook.Common.Interfaces.Services
         Task<ServiceResponseDto<Note>> UpdateBgImageAsync (Guid userId, int noteId, byte[ ] imageBytes, string contentType, string fileName);
         Task<ServiceResponseDto<Note>> RemoveBgImageAsync (Guid userId, int noteId);
         Task<ServiceResponseDto<Note>> DeleteNoteAsync (Guid userId, int noteId);
-        Task<ServiceResponseDto<Note>> ChangeNoteStyleAsync (Guid userId, int noteId, string color, string fill);
-        Task<ServiceResponseDto<Note>> SetCompleteNoteAsync (Guid userId, int noteId);
-
+    
         Task<ServiceResponseDto<List<Category>>> GetCategoriesAsync (Guid userId);
 
         Task<ServiceResponseDto<Category>> CreateCategoryAsync (Guid userId, string categoryName);

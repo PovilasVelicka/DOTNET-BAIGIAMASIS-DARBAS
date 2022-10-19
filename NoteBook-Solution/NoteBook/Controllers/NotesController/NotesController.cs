@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NoteBook.AccessData.Migrations;
 using NoteBook.Common.Interfaces.Services;
 using NoteBook.Controllers.NotesController.DTOs;
 using NoteBook.Exstentions;
@@ -86,26 +85,6 @@ namespace NoteBook.Controllers.NotesController
                 );
 
             return this.GetActionResult(result, new NoteDto(result.Object!));
-        }
-
-        [HttpPatch("set-complete/{id}")]
-        public async Task<IActionResult> SetCompleteAsync (int id)
-        {
-            var userGuid = this.GetUserGuid( );
-            var result = await _notesService.SetCompleteNoteAsync(userGuid, id);
-            return this.GetActionResult(result, new NoteDto(result.Object!));
-        }
-
-        [HttpPatch("change-style/{id}")]
-        public async Task<IActionResult> ChangeStyleAsync (int id, NoteStyleDto noteStyleDto)
-        {
-            var userGuid = this.GetUserGuid( );
-            var result = await _notesService.ChangeNoteStyleAsync(
-                userGuid,
-                noteId: id,
-                color: noteStyleDto.Color,
-                fill: noteStyleDto.Fill);
-            return this.GetActionResult(result, new NoteDto(result.Object));
         }
 
         [HttpPatch("delete/{id}")]

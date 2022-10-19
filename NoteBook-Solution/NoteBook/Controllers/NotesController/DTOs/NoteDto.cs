@@ -15,7 +15,7 @@ namespace NoteBook.Controllers.NotesController.DTOs
         public bool? UseReminder { get; set; }
         public bool? Complete { get; set; }
         public int? ImageId { get; set; }
-        public BgImageDto? BackGround { get; }
+        public BgImageDto? BgImage { get; }
         public NoteDto ( ) { }
         public NoteDto (Note? note)
         {
@@ -31,7 +31,7 @@ namespace NoteBook.Controllers.NotesController.DTOs
             Reminder = note.Reminder;
             UseReminder = note.UseReminder;
             ImageId = note.FileId;
-            BackGround = note.File != null ? new BgImageDto(note.File.FileContent.Bites, note.File.ContentType) : null;
+            BgImage = note.File != null ? new BgImageDto(note.File.FileContent.Bites, note.File.ContentType) : null;
         }
     }
 }

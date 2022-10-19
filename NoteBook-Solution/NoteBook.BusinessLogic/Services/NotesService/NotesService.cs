@@ -28,7 +28,9 @@ namespace NoteBook.BusinessLogic.Services.NotesService
                 NoteText = noteText,
                 Category = category,
                 Reminder = setReminder,
-                UseReminder = setReminder != null
+                UseReminder = setReminder != null,
+                Priority = Priority.NotUrgentImportant
+                
             };
 
             try
@@ -135,24 +137,7 @@ namespace NoteBook.BusinessLogic.Services.NotesService
             return new ServiceResponseDto<List<Note>>(notes);
         }
 
-        public async Task<ServiceResponseDto<Note>> ChangeNoteStyleAsync (Guid userId, int noteId, string color, string fill)
-        {
-            var note = await _repository.GetNoteByNoteIdAsync(userId, noteId);
-            note.Fill = fill;
-            note.Color = color;
-            await _repository.SaveChangesAsync( );
-            return new ServiceResponseDto<Note>(note);
-        }
-
-        public async Task<ServiceResponseDto<Note>> SetCompleteNoteAsync (Guid userId, int noteId)
-        {
-            var note = await _repository.GetNoteByNoteIdAsync(userId, noteId);
-            note.Complete = true;
-            await _repository.SaveChangesAsync( );
-            return new ServiceResponseDto<Note>(note);
-        }
-
-        public async Task<ServiceResponseDto<List<Category>>> GetCategoriesAsync (Guid userId)
+         public async Task<ServiceResponseDto<List<Category>>> GetCategoriesAsync (Guid userId)
         {
             var categories = await _repository.GetCategoriesAsync(userId);
             return new ServiceResponseDto<List<Category>>(categories);
